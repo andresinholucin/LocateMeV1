@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.usuariocontrasenia"
+    tools:layout_editor_absoluteY="81dp"
+    android:layout_centerInParent="true"
+    tools:layout_editor_absoluteX="0dp">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:srcCompat="@mipmap/ic_launcher"
+                tools:layout_editor_absoluteX="168dp"
+                tools:layout_editor_absoluteY="58dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usuario"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="159dp" />
+
+            <EditText
+                android:id="@+id/editTextusuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="189dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Contraseña"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="247dp" />
+
+            <EditText
+                android:id="@+id/editTextcontrasenia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName|textPassword"
+                tools:layout_editor_absoluteX="25dp"
+                tools:layout_editor_absoluteY="281dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Repetir Contraseña"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="247dp" />
+
+            <EditText
+                android:id="@+id/editTextrepitecontrasenia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword"
+                tools:layout_editor_absoluteX="25dp"
+                tools:layout_editor_absoluteY="281dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_siguiente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="btn_siguiente"
+                android:text="Siguiente"
+                tools:layout_editor_absoluteX="79dp"
+                tools:layout_editor_absoluteY="420dp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

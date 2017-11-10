@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">LocateMe</string>
+
+    <string name="txt_registro_tutor">Registro Tutor</string>
+    <string name="txt_nombres">Nombres</string>
+    <string name="txt_apellidos">Apellidos</string>
+    <string name="txt_cedula">Cédula</string>
+    <string name="txt_fecha_nacimiento">Fecha de Nacimiento</string>
+    <string name="txt_telefono">Teléfono</string>
+    <string name="txt_direccion">Dirección</string>
+    <string name="txt_email">E-mail</string>
+    <string name="txt_usuario">Usuario</string>
+    <string name="txt_contrasenia">Contraseña</string>
+    <string name="txt_repetir_contrasenia">Repita Contraseña</string>
+    <string name="txt_tiene_cuenta">¿Tienes cuenta? Accedde!</string>
+    <string name="txt_olvidates_contrasenia">¿Olvidastes tu Contraseña?</string>
+
+    <string name="action_ubicarmapa_item">Ubicar en el Mapa</string>
+    <string name="action_perfil_item">Perfil</string>
+    <string name="action_configuraciones_item">Configuraciones</string>
+
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_iniciar">Iniciar</string>
+    <string name="btn_registrar">Registrar</string>
+
+    <string name="btn_mapa">Mapa</string>
+    <string name="btn_cerrar">Cerrar</string>
+
+    <string name="btn_punto_inicio">Inicio</string>
+    <string name="btn_punto_fin">Fin</string>
+    <string name="btn_distacia">Distancia</string>
+    <string name="title_activity_menu">Bienvenido a LocateMe</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Ubicacion</string>
+</resources>

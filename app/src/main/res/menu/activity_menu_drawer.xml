@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="all" >
+        <item
+            android:id="@+id/nav_inicio"
+            android:icon="@mipmap/icon"
+            android:title="Inicio" />
+
+        <item
+            android:id="@+id/nav_tutor"
+            android:icon="@mipmap/usuario"
+             android:title="Tutor" />
+        <item
+            android:id="@+id/nav_alertas"
+            android:icon="@mipmap/alertas"
+            android:title="Alertas" />
+        <item
+            android:id="@+id/nav_mapa"
+            android:icon="@mipmap/mapa"
+            android:title="Mapa" />
+
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Configuración" />
+            <item
+                android:id="@+id/nav_cerrar_sesion"
+                android:icon="@mipmap/cerrar_sesion"
+                android:title="Cerra Sesión" />
+        </menu>
+    </item>
+
+</menu>

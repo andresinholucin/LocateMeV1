@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_perfil"
+        android:title="@string/action_perfil_item"/>
+    <item
+        android:id="@+id/action_configuraciones"
+        android:title="@string/action_configuraciones_item"/>
+    <item
+        android:id="@+id/action_mapa"
+        android:title="@string/action_ubicarmapa_item"/>
+</menu>
