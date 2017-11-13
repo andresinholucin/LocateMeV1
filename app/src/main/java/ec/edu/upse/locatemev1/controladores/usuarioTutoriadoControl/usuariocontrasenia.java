@@ -55,6 +55,18 @@ public class usuariocontrasenia extends AppCompatActivity {
 
     public Boolean validaciones(){
 
+        String usuario= txt_usuario.getText().toString();
+        String contrasenia=txt_contraseña.getText().toString();
+        String repite=txt_repitecontraseña.getText().toString();
+
+        if(usuario.isEmpty()){
+            txt_usuario.setError("Ingrese Usuario");
+        }else if(contrasenia.isEmpty()){
+            txt_contraseña.setError("Ingrese Conteraseña");
+        }else if(repite.isEmpty()){
+            txt_repitecontraseña.setError("RepitaContraseña");
+        }
+
         if(txt_contraseña.getText().toString().equals(txt_repitecontraseña.getText().toString())){
             return true;
         }else{

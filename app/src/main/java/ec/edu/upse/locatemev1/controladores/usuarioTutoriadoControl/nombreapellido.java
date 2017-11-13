@@ -100,14 +100,30 @@ public class nombreapellido extends AppCompatActivity {
     }
 
     public  void btn_siguiente(View view){
-        Usuario usuario= new Usuario();
-        usuario.setUsuUNombres(txt_nombre.getText().toString());
-        usuario.setUsuUApellidos(txt_apellido.getText().toString());
+        if (validaciones()){
+            Usuario usuario= new Usuario();
+            usuario.setUsuUNombres(txt_nombre.getText().toString());
+            usuario.setUsuUApellidos(txt_apellido.getText().toString());
 
-        Intent intent = new Intent(this, usuariocontrasenia.class);
-        intent.putExtra("usuario", usuario);
-        intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
-        startActivity(intent);
+            Intent intent = new Intent(this, usuariocontrasenia.class);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
+            startActivity(intent);
+        }
+    }
+
+    public boolean validaciones(){
+        String nombre=txt_nombre.getText().toString();
+        String apellido=txt_apellido.getText().toString();
+        if (nombre.isEmpty()){
+            txt_nombre.setError("Ingrese Nombre");
+            return false;
+
+        }else if(apellido.isEmpty()){
+            txt_apellido.setError("Ingrese Apellido");
+            return false;
+        }
+    return true;
     }
 
     //llamada al web service para llenar el combo con los tipos de discapacidades

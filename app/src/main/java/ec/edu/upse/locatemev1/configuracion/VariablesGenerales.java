@@ -16,7 +16,7 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class VariablesGenerales extends Application {
     public static VariablesGenerales instance;
-    public static String strRuta="http://192.168.101.21:8080/WebServiceAlertasSpring/api/";
+    public static String strRuta="http://192.168.0.109:8080/WebServiceAlertasSpring/api/";
     public static Long lonIdUsuario;
     public static Long lonIdTutor;
     public static Long lonIdTutoriadosLista;
