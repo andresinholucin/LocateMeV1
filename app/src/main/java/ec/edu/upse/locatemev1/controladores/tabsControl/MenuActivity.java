@@ -1,12 +1,12 @@
 package ec.edu.upse.locatemev1.controladores.tabsControl;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,25 +14,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ec.edu.upse.locatemev1.R;
 import ec.edu.upse.locatemev1.controladores.principal.MainActivity;
-import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.nombreapellido;
+import ec.edu.upse.locatemev1.controladores.usuarioTutorControl.PerfilUsuarioTutor;
 import layout.UbicacionFragment;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,6 +45,7 @@ public class MenuActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.contenedor,new MenuFragment()).commit();
+
 
 
     }
@@ -96,12 +94,14 @@ public class MenuActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.contenedor,new MenuFragment()).commit();
             // Handle the camera action
         } else if (id == R.id.nav_tutor) {
-            fragmentManager.beginTransaction().replace(R.id.contenedor,new AlertasFragment()).commit();
+            Intent intent = new Intent(MenuActivity.this,PerfilUsuarioTutor.class);
+            startActivity(intent);
+
+            //fragmentManager.beginTransaction().replace(R.id.contenedor,new AlertasFragment()).commit();
             // Handle the camera action
         } else if (id == R.id.nav_alertas) {
             //Intent intent = new Intent(MenuActivity.this,MapsActivity.class);
            // startActivity(intent);
-            fragmentManager.beginTransaction().replace(R.id.contenedor,new TabUbicacionFragment()).commit();
 
         } else if (id == R.id.nav_mapa) {
             UbicacionFragment ubicacionFragment = new UbicacionFragment();
@@ -110,11 +110,27 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_cerrar_sesion) {
-            SharedPreferences miPreferencia = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = miPreferencia.edit();
-            finish();
-            editor.clear();
-            editor.commit();
+
+            final ProgressDialog dialogo = new ProgressDialog(MenuActivity.this, R.style.AppTheme);
+            dialogo.setIndeterminate(true);
+            dialogo.setMessage("Cerrando Sesion...");
+            dialogo.show();
+
+            long delayInMillis = 5000;
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    dialogo.dismiss();
+                    SharedPreferences miPreferencia = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = miPreferencia.edit();
+                    finish();
+                    editor.clear();
+                    editor.commit();
+                    Intent intent = new Intent(MenuActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+            }, delayInMillis);
 
         }
 
@@ -122,32 +138,32 @@ public class MenuActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-/*
+
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(MenuActivity.this, "onResume", Toast.LENGTH_LONG).show();
+       // Toast.makeText(MenuActivity.this, "onResume", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(MenuActivity.this, "onStop", Toast.LENGTH_LONG).show();
+       // Toast.makeText(MenuActivity.this, "onStop", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(MenuActivity.this, "onRestart", Toast.LENGTH_LONG).show();
+        //Toast.makeText(MenuActivity.this, "onRestart", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(MenuActivity.this, "onDestroy", Toast.LENGTH_LONG).show();
+       //Toast.makeText(MenuActivity.this, "onDestroy", Toast.LENGTH_LONG).show();
 
-    }*/
+    }
 }

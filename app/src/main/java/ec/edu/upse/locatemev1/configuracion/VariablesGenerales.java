@@ -16,7 +16,7 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class VariablesGenerales extends Application {
     public static VariablesGenerales instance;
-    public static String strRuta="http://192.168.0.109:8080/WebServiceAlertasSpring/api/";
+    //public static String strRuta="http://172.19.10.63:8080/WebServiceAlertasSpring/api/";
     public static Long lonIdUsuario;
     public static Long lonIdTutor;
     public static Long lonIdTutoriadosLista;
@@ -27,9 +27,18 @@ public class VariablesGenerales extends Application {
     public static List<Usuario> listUsuario;
     public static List<EmisionAlerta> listEmisionAlerta;
 
+    public List<Usuario> listaUsuariosPorTutor;
     public List<TipoDiscapacidad> listaTipoDiscapacidad;
     public List<TiempoSensado> listaTiempoSensado;
     public List<Perimetro> listaPerimetro;
+
+    public List<Usuario> getListaUsuariosPorTutor() {
+        return listaUsuariosPorTutor;
+    }
+
+    public void setListaUsuariosPorTutor(List<Usuario> listaUsuariosPorTutor) {
+        this.listaUsuariosPorTutor = listaUsuariosPorTutor;
+    }
 
     public List<TipoDiscapacidad> getListaTipoDiscapacidad() {
         return listaTipoDiscapacidad;
@@ -118,5 +127,28 @@ public class VariablesGenerales extends Application {
 
     public static void setIntPeticionAlerta(Integer intPeticionAlerta) {
         VariablesGenerales.intPeticionAlerta = intPeticionAlerta;
+    }
+
+    /**
+     *Tutor
+     */
+    public static Integer intBandera;
+
+    public static Integer getIntBandera() {
+        return intBandera;
+    }
+
+    public static void setIntBandera(Integer intBandera) {
+        VariablesGenerales.intBandera = intBandera;
+    }
+
+    public static List<Usuario> listTutor;
+
+    public static List<Usuario> getListTutor() {
+        return listTutor;
+    }
+
+    public static void setListTutor(List<Usuario> listTutor) {
+        VariablesGenerales.listTutor = listTutor;
     }
 }

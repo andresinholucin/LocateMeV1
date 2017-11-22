@@ -1,7 +1,25 @@
 <resources>
     <string name="app_name">LocateMe</string>
 
+    <string name="txt_titulo">LOCATE-ME</string>
+
+    <!--Titulos de interfaz Usuario Tutor /-->
     <string name="txt_registro_tutor">Registro Tutor</string>
+    <string name="txt_perfil_tutor">Perfil Tutor</string>
+    <string name="txt_titulo_cabecera">Te ayudamos a crear un nuevo usuario en pocos pasos</string>
+    <string name="txt_titulo_nombres_cedula">¿Cómo se llama y cuál es su número de cédula?</string>
+    <string name="txt_titulo_nacimiento_celular">¿Cuándo naciste y cuál es tu número celular?</string>
+    <string name="txt_titulo_direccion_correo">Escriba su dirección y correo electrónico</string>
+    <string name="txt_titulo_usuario_contrasenia">Ingrese su usuario y contraseña</string>
+
+    <!--Titulos de interfaz Usuario Tutoriado /-->
+    <string name="txt_perfil_usuario">Perfil Usuario Tutoreado</string>
+    <string name="txt_titulo_cabecera1">Te ayudamos a registrar un nuevo tutoreado en pocos pasos</string>
+    <string name="txt_titulo_nombre_apellido_grupo">¿Cómo se llama y a qué grupo pertenece</string>
+    <string name="txt_titulo_tiempo_perimetro_recepcion">Ingrese tiempo, perimetro y recepción</string>
+    <string name="txt_titulo_cedula_nacimiento">¿Cuál es su número de cédula y cuándo nacio?</string>
+
+
     <string name="txt_nombres">Nombres</string>
     <string name="txt_apellidos">Apellidos</string>
     <string name="txt_cedula">Cédula</string>
@@ -11,21 +29,26 @@
     <string name="txt_email">E-mail</string>
     <string name="txt_usuario">Usuario</string>
     <string name="txt_contrasenia">Contraseña</string>
+    <string name="txt_tipo_discapacidad">Tipo Discapacidad</string>
+    <string name="txt_tiempo_sensado">Tiempo Sensado (min)</string>
+    <string name="txt_perimetro">Perimetros (metros)</string>
+    <string name="txt_sms">Recepción SMS</string>
     <string name="txt_repetir_contrasenia">Repita Contraseña</string>
     <string name="txt_tiene_cuenta">¿Tienes cuenta? Accedde!</string>
-    <string name="txt_olvidates_contrasenia">¿Olvidastes tu Contraseña?</string>
-
-    <string name="action_ubicarmapa_item">Ubicar en el Mapa</string>
+    <string name="txt_olvidaste_contrasenia">¿Olvidaste tu Contraseña?</string>
+    <string name="action_ubicar_mapa_item">Ubicar en el Mapa</string>
     <string name="action_perfil_item">Perfil</string>
     <string name="action_configuraciones_item">Configuraciones</string>
 
     <string name="btn_guardar">Guardar</string>
     <string name="btn_iniciar">Iniciar</string>
     <string name="btn_registrar">Registrar</string>
-
+    <string name="btn_aceptar">Aceptar</string>
+    <string name="btn_siguiente">Siguiente</string>
+    <string name="btn_editar">Editar</string>
     <string name="btn_mapa">Mapa</string>
     <string name="btn_cerrar">Cerrar</string>
-
+    <string name="btn_cancelar">Cancelar</string>
     <string name="btn_punto_inicio">Inicio</string>
     <string name="btn_punto_fin">Fin</string>
     <string name="btn_distacia">Distancia</string>

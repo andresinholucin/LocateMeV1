@@ -14,9 +14,9 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class usuariocontrasenia extends AppCompatActivity {
     Button btnsiguiente;
-    EditText txt_usuario;
-    EditText txt_contraseña;
-    EditText txt_repitecontraseña;
+    EditText txtUsuario;
+    EditText txtContraseña;
+    EditText txtRepiteContraseña;
     Usuario usuario;
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
 
@@ -33,17 +33,17 @@ public class usuariocontrasenia extends AppCompatActivity {
 
     public void anadirElementos(){
         btnsiguiente=(Button)findViewById(R.id.btn_siguiente);
-        txt_usuario=(EditText)findViewById(R.id.editTextusuario);
-        txt_contraseña=(EditText)findViewById(R.id.editTextcontrasenia);
-        txt_repitecontraseña=(EditText)findViewById(R.id.editTextrepitecontrasenia);
+        txtUsuario =(EditText)findViewById(R.id.txt_usuario);
+        txtContraseña =(EditText)findViewById(R.id.txt_pass);
+        txtRepiteContraseña =(EditText)findViewById(R.id.txt_passRepetir);
         usuario=getIntent().getParcelableExtra("usuario");
         tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
     }
 
     public void btn_siguiente(View v){
         if (validaciones()){
-            usuario.setUsuUUsuario(txt_usuario.getText().toString());
-            usuario.setUsuUClave(txt_contraseña.getText().toString());
+            usuario.setUsuUUsuario(txtUsuario.getText().toString());
+            usuario.setUsuUClave(txtContraseña.getText().toString());
 
             Intent intent=new Intent(usuariocontrasenia.this, datospersonales1.class);
             intent.putExtra("usuario", usuario);
@@ -55,27 +55,26 @@ public class usuariocontrasenia extends AppCompatActivity {
 
     public Boolean validaciones(){
 
-        String usuario= txt_usuario.getText().toString();
-        String contrasenia=txt_contraseña.getText().toString();
-        String repite=txt_repitecontraseña.getText().toString();
+        String usuario= txtUsuario.getText().toString();
+        String contrasenia= txtContraseña.getText().toString();
+        String repite= txtRepiteContraseña.getText().toString();
 
         if(usuario.isEmpty()){
-            txt_usuario.setError("Ingrese Usuario");
+            txtUsuario.setError("Ingrese Usuario");
+            return false;
         }else if(contrasenia.isEmpty()){
-            txt_contraseña.setError("Ingrese Conteraseña");
+            txtContraseña.setError("Ingrese Conteraseña");
+            return false;
         }else if(repite.isEmpty()){
-            txt_repitecontraseña.setError("RepitaContraseña");
-        }
-
-        if(txt_contraseña.getText().toString().equals(txt_repitecontraseña.getText().toString())){
-            return true;
-        }else{
+            txtRepiteContraseña.setError("RepitaContraseña");
+            return false;
+        } else if(!txtContraseña.getText().toString().equals(txtRepiteContraseña.getText().toString())){
             Toast toast= Toast.makeText(getApplicationContext(),"Contraseñas Incorrectas", Toast.LENGTH_LONG);
             toast.show();
             return false;
+        }else{
+            return true;
         }
     }
-
-
 
 }

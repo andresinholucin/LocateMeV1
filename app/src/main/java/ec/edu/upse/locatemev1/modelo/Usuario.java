@@ -255,7 +255,7 @@ public class Usuario implements Parcelable {
         this.perimetroSensado = in.readParcelable(Perimetro.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Usuario> CREATOR = new Parcelable.Creator<Usuario>() {
+    public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
         @Override
         public Usuario createFromParcel(Parcel source) {
             return new Usuario(source);

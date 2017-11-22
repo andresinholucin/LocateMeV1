@@ -18,11 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
+import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.modelo.EmisionAlerta;
 
 public class TabAlertasFragment extends Fragment {
-
+   ParametrosConexion conexion = new ParametrosConexion();
     List<EmisionAlerta> listaAlertas= new ArrayList<EmisionAlerta>();
     List<String> lstAlertaString= new ArrayList<String>();
     ListView lista;
@@ -55,11 +56,11 @@ public class TabAlertasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                for(int i=0 ; i< VariablesGenerales.getListUsuario().size();i++) {
+                for(int i = 0; i< VariablesGenerales.getListUsuario().size(); i++) {
 
                     System.out.println("=== Imprime ===");
-                    //final String url = VariablesGenerales.strRuta+"emisionAlerta/alertasUsuario/"+VariablesGenerales.getLonIdTutor();
-                    final String url = VariablesGenerales.strRuta+"emisionAlerta/listaAlerta/"+VariablesGenerales.getListUsuario().get(i).getIdusuario();
+                    final String url = conexion.urlcompeta("emisionAlerta","alertasUsuario2/"+ VariablesGenerales.getLonIdTutor());
+                    //final String url = conexion.urlcompeta("emisionAlerta","listaAlerta/"+VariablesGenerales.getListUsuario().get(i).getIdusuario());
                     System.out.println(url);
                     RestTemplate restTemplate = new RestTemplate();
                     //System.out.println("Aqui2:" +json);

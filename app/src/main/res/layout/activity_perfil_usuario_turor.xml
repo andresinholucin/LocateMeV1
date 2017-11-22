@@ -8,7 +8,8 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.perfilUsuarioTutoreado"
+        tools:context="ec.edu.upse.locatemev1.controladores.usuarioTutorControl.PerfilUsuarioTutor"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -22,10 +23,8 @@
 
         <TextView
             style="@style/TextViewtStyle"
-            android:text="@string/txt_perfil_usuario"
-            android:id="@+id/txtmensajeTutor"
-            android:enabled="false"/>
-
+            android:text="Perfil Tutor"
+            android:id="@+id/txtmensajeTutor" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -33,7 +32,7 @@
 
             <EditText
                 style="@style/EditTextStyle"
-                android:id="@+id/txt_nombresPerfilUsuario"
+                android:id="@+id/txt_nombresPerfilTutor"
                 android:inputType="textPersonName"
                 android:hint="@string/txt_nombres"
                 android:maxLength="25"
@@ -41,24 +40,24 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout  android:layout_width="match_parent"
-            android:layout_height="49dp"
+        <android.support.design.widget.TextInputLayout android:layout_height="51dp"
+            android:layout_width="match_parent"
             app:errorEnabled="true">
 
             <EditText
                 style="@style/EditTextStyle"
-                android:id="@+id/txt_apellidosPerfilUsuario"
+                android:id="@+id/txt_apellidosPerfilTutor"
                 android:hint="@string/txt_apellidos"
-                android:layout_alignRight="@+id/txt_nombresPerfilUsuario"
-                android:layout_alignEnd="@+id/txt_nombresPerfilUsuario"
+                android:layout_alignRight="@+id/txt_nombresPerfilTutor"
+                android:layout_alignEnd="@+id/txt_nombresPerfilTutor"
                 android:inputType="textPersonName"
                 android:maxLength="25"
                 android:enabled="false"/>
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout  android:layout_width="match_parent"
-            android:layout_height="49dp"
+        <android.support.design.widget.TextInputLayout android:layout_height="59dp"
+            android:layout_width="match_parent"
             app:counterEnabled="true"
             android:id="@+id/til_cedula"
             app:counterOverflowTextAppearance="@style/AppTheme.CharacterCounter">
@@ -67,16 +66,16 @@
                 android:inputType="numberSigned"
                 android:hint="@string/txt_cedula"
                 android:id="@+id/txt_cedula"
-                android:layout_alignRight="@+id/txt_apellidosPerfilUsuario"
-                android:layout_alignEnd="@+id/txt_apellidosPerfilUsuario"
+                android:layout_alignRight="@+id/txt_apellidosPerfilTutor"
+                android:layout_alignEnd="@+id/txt_apellidosPerfilTutor"
                 android:layout_marginTop="40dip"
                 android:maxLength="10"
                 android:enabled="false"/>
-        </android.support.design.widget.TextInputLayout>
 
+        </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp">
+            android:layout_height="wrap_content">
             <EditText
                 style="@style/EditTextStyle"
                 android:id="@+id/txt_fechaNacimientoPerfil"
@@ -89,38 +88,56 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp">
+            android:layout_height="wrap_content"
+            app:counterOverflowTextAppearance="@style/AppTheme.CharacterCounter">
             <EditText
                 style="@style/EditTextStyle"
-                android:id="@+id/txt_tipoDiscapacidad"
-                android:hint="@string/txt_tipo_discapacidad"
                 android:layout_alignRight="@+id/txt_fechaNacimientoPerfil"
                 android:layout_alignEnd="@+id/txt_fechaNacimientoPerfil"
-                android:inputType="textPersonName"
-                android:enabled="false"/>
-
+                android:inputType="phone"
+                android:id="@+id/txt_telefonoPerfilTutor"
+                app:counterMaxLength="10"
+                android:hint="@string/txt_telefono"
+                android:enabled="false"
+                />
         </android.support.design.widget.TextInputLayout>
-
-        <Button
-            style="@style/buttonStyle"
-            android:id="@+id/btn_editar1"
-            android:text="@string/btn_editar"
-            android:onClick="editarPerfilTutor"
-            android:layout_marginTop="40dip"
-            android:enabled="false"/>
-
-        <TextView
-            style="@style/TextViewtStyle"
-            android:text="Perfil Usuario"
-            android:id="@+id/txtmensaje2"
-            android:enabled="false"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp">
+            android:layout_height="wrap_content">
             <EditText
                 style="@style/EditTextStyle"
-                android:id="@+id/txt_usuarioPerfil"
+                android:layout_alignRight="@+id/txt_telefonoPerfilTutor"
+                android:layout_alignEnd="@+id/txt_telefonoPerfilTutor"
+                android:inputType="textPostalAddress"
+                android:id="@+id/txt_direccionPerfilTutor"
+                android:hint="@string/txt_direccion"
+                android:maxLength="50"
+                android:enabled="false"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                style="@style/EditTextStyle"
+                android:layout_alignRight="@+id/txt_direccionPerfilTutor"
+                android:layout_alignEnd="@+id/txt_direccionPerfilTutor"
+                android:id="@+id/txt_emailPerfilTutor"
+                android:hint="@string/txt_email"
+                android:inputType="textEmailAddress"
+                android:maxLength="50"
+                android:enabled="false"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                style="@style/EditTextStyle"
+                android:layout_alignRight="@+id/txt_emailPerfilTutor"
+                android:layout_alignEnd="@+id/txt_emailPerfilTutor"
+                android:id="@+id/txt_usuarioPerfilTutor"
                 android:hint="Usuario"
                 android:inputType="text"
                 android:maxLength="10"
@@ -129,30 +146,41 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorAccent"
             >
             <EditText
                 style="@style/EditTextStyle"
-                android:layout_alignRight="@+id/txt_usuarioPerfil"
-                android:layout_alignEnd="@+id/txt_usuarioPerfil"
+                android:layout_alignRight="@+id/txt_usuarioPerfilTutor"
+                android:layout_alignEnd="@+id/txt_usuarioPerfilTutor"
                 android:inputType="textPassword"
-                android:id="@+id/txt_passPerfilUsuario"
+                android:id="@+id/txt_passPerfilTutor"
                 app:counterMaxLength="8"
                 android:hint="@string/txt_contrasenia"
                 android:enabled="false"/>
         </android.support.design.widget.TextInputLayout>
 
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1" />
+
         <Button
             style="@style/buttonStyle"
-            android:id="@+id/btn_editar2"
-            android:text="@string/btn_editar"
-            android:onClick="editarPerfilUsuario"
+            android:id="@+id/btn_editar"
+            android:text="Editar"
+            android:onClick="editarPerfilTutor"
             android:layout_marginTop="40dip"
-            android:enabled="false"
             />
 
+        <TextView
+            style="@style/EditTextStyle"
+            android:id="@+id/editartutor"
+            android:layout_marginTop="40dip"
+            android:layout_marginBottom="40dip"
+            android:enabled="false"/>
     </LinearLayout>
-</ScrollView>
 
+</ScrollView>

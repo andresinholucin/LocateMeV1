@@ -5,125 +5,143 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:background="@color/colorBackground"
-    tools:context="ec.edu.upse.locatemev1.Controlador.usuarioTutoriadoControl.ubicacionUsuarioControl.MainActivity">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="170pt"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:weightSum="1">
-
-        <TextView android:text = "LOCATE-ME"
-            android:layout_width="match_parent"
-            android:layout_height = "wrap_content"
-            android:id = "@+id/textview"
-            android:textSize = "33dp"
-            android:textAlignment="center"
-            android:textColor="#ffffff"
-            android:typeface="normal"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:background="@color/colorBackground"
+        tools:context="ec.edu.upse.locatemev1.controladores.principal.MainActivity">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="170pt"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:weightSum="1">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/logo"
-            android:id="@+id/imageView"
-            android:layout_weight="0.20" />
+            <TextView android:text = "@string/txt_titulo"
+                android:layout_width="match_parent"
+                android:layout_height = "wrap_content"
+                android:id = "@+id/textview"
+                android:textSize = "33dp"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:typeface="normal"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint = "#FFFFFF">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/logo"
+                android:id="@+id/imageView"
+                android:layout_weight="0.20" />
 
-            <EditText
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint = "#FFFFFF">
+
+                <EditText
+                    android:layout_width = "match_parent"
+                    android:layout_height = "20pt"
+                    android:id = "@+id/txt_usuario"
+                    android:hint = "@string/txt_usuario"
+                    android:textColorHint = "#FFFFFF"
+                    android:textColor="#FFFFFF"
+                    android:maxLength="10"
+                    android:layout_centerHorizontal="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                android:textColorHint = "#FFFFFF">
+
+                <EditText
+                    android:layout_width = "match_parent"
+                    android:layout_height = "20pt"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/txt_password"
+                    android:textColorHint = "#FFFFFF"
+                    android:textColor="#FFFFFF"
+                    android:hint="@string/txt_contrasenia"
+                    android:layout_below="@+id/textview"
+                    android:layout_alignStart="@+id/btn_conectar" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
                 android:layout_width = "match_parent"
                 android:layout_height = "20pt"
-                android:id = "@+id/txtUsuario"
-                android:hint = "@string/txt_usuario"
-                android:textColorHint = "#FFFFFF"
-                android:textColor="#FFFFFF"
-                android:maxLength="10"
-                android:layout_centerHorizontal="true" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="15dp"
+                android:text="@string/btn_iniciar"
+                android:id="@+id/btn_conectar"
+                android:onClick="inicioSesion"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="41dp"
+                android:textColor="@color/colorActivity"
+                android:background="@color/colorPrimary"
+                android:textStyle="bold"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint = "#FFFFFF">
-
-            <EditText
+            <TextView
                 android:layout_width = "match_parent"
                 android:layout_height = "20pt"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/txtPassword"
-                android:textColorHint = "#FFFFFF"
+                android:text = "@string/txt_olvidaste_contrasenia"
+                android:id = "@+id/txtOlvidoContraseña"
+                android:textSize = "18dp"
                 android:textColor="#FFFFFF"
-                android:hint="@string/txt_contrasenia"
-                android:layout_below="@+id/textview"
-                android:layout_alignStart="@+id/btnConectar" />
-        </android.support.design.widget.TextInputLayout>
+                android:gravity="center"
+                android:onClick="irInterfaz"
+                android:layout_above="@+id/btnRegistrar"
+                android:layout_toEndOf="@+id/info"
+                />
 
-        <Button
-            android:layout_width = "match_parent"
-            android:layout_height = "20pt"
-            android:textSize="15dp"
-            android:text="@string/btn_iniciar"
-            android:id="@+id/btnConectar"
-            android:onClick="InicioSesion"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="41dp"
-            android:textColor="@color/colorActivity"
-            android:background="@color/colorPrimary"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width = "match_parent"
-            android:layout_height = "20pt"
-            android:text = "@string/txt_olvidates_contrasenia"
-            android:id = "@+id/txtOlvidoContraseña"
-            android:textSize = "18dp"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:onClick="irInterfaz"
-            android:layout_above="@+id/btnRegistrar"
-            android:layout_toEndOf="@+id/info"
-            />
-
-        <Button
-            android:layout_width = "match_parent"
-            android:layout_height = "20pt"
-            android:textSize="15dp"
-            android:text="@string/btn_registrar"
-            android:id="@+id/btnRegistrar"
-            android:onClick="irInterfaz"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="41dp"
-            android:textColor="@color/colorActivity"
-            android:background="@color/colorPrimary"
-            android:textStyle="bold"
-            />
+            <Button
+                android:layout_width = "match_parent"
+                android:layout_height = "20pt"
+                android:textSize="15dp"
+                android:text="@string/btn_registrar"
+                android:id="@+id/btn_registrar"
+                android:onClick="irInterfaz"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="41dp"
+                android:textColor="@color/colorActivity"
+                android:background="@color/colorPrimary"
+                android:textStyle="bold"
+                />
 
 
-    </LinearLayout>
+            <Button
+                android:layout_width = "match_parent"
+                android:layout_height = "20pt"
+                android:textSize="15dp"
+                android:text="@string/btn_editar"
+                android:id="@+id/btn_editar"
+                android:onClick="irInterfaz"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="41dp"
+                android:textColor="@color/colorActivity"
+                android:background="@color/colorPrimary"
+                android:textStyle="bold"
+                />
 
-</RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 </ScrollView>

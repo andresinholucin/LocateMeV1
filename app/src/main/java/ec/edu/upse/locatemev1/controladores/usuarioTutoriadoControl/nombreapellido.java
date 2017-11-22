@@ -30,8 +30,10 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 public class nombreapellido extends AppCompatActivity {
     Button btnsiguiente;
     Spinner sp_listadiscapacidad;
-    EditText txt_nombre;
-    EditText txt_apellido;
+    EditText txtNombre;
+    EditText txtApellido;
+
+
 
     Usuario usuario= new Usuario();
     VariablesGenerales variablesGenerales;
@@ -72,8 +74,8 @@ public class nombreapellido extends AppCompatActivity {
     public void anadirElementos(){
         btnsiguiente =(Button)findViewById(R.id.btn_siguiente);
         sp_listadiscapacidad=(Spinner)findViewById(R.id.sp_discapacidades);
-        txt_nombre=(EditText)findViewById(R.id.editTextnombre);
-        txt_apellido=(EditText)findViewById(R.id.editTextapellido);
+        txtNombre=(EditText)findViewById(R.id.txt_nombresUsuario);
+        txtApellido=(EditText)findViewById(R.id.txt_apellidosUsuario);
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
     }
 
@@ -102,8 +104,8 @@ public class nombreapellido extends AppCompatActivity {
     public  void btn_siguiente(View view){
         if (validaciones()){
             Usuario usuario= new Usuario();
-            usuario.setUsuUNombres(txt_nombre.getText().toString());
-            usuario.setUsuUApellidos(txt_apellido.getText().toString());
+            usuario.setUsuUNombres(txtNombre.getText().toString());
+            usuario.setUsuUApellidos(txtApellido.getText().toString());
 
             Intent intent = new Intent(this, usuariocontrasenia.class);
             intent.putExtra("usuario", usuario);
@@ -113,14 +115,14 @@ public class nombreapellido extends AppCompatActivity {
     }
 
     public boolean validaciones(){
-        String nombre=txt_nombre.getText().toString();
-        String apellido=txt_apellido.getText().toString();
+        String nombre= txtNombre.getText().toString();
+        String apellido= txtApellido.getText().toString();
         if (nombre.isEmpty()){
-            txt_nombre.setError("Ingrese Nombre");
+            txtNombre.setError("Ingrese Nombre");
             return false;
 
         }else if(apellido.isEmpty()){
-            txt_apellido.setError("Ingrese Apellido");
+            txtApellido.setError("Ingrese Apellido");
             return false;
         }
     return true;

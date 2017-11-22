@@ -12,9 +12,9 @@ import ec.edu.upse.locatemev1.modelo.TipoDiscapacidad;
 import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class datospersonales2 extends AppCompatActivity {
-    EditText txt_correo;
-    EditText txt_direccion;
-    Button btnaceptar;
+    EditText txtCorreo;
+    EditText txtDireccion;
+    Button btnAceptar;
     Usuario usuario;
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
 
@@ -26,17 +26,17 @@ public class datospersonales2 extends AppCompatActivity {
     }
 
     public void anadirElementos(){
-        txt_correo=(EditText)findViewById(R.id.editTextcorreo);
-        txt_direccion=(EditText)findViewById(R.id.editTextdireccion);
-        btnaceptar=(Button)findViewById(R.id.btn_aceptar);
+        txtCorreo =(EditText)findViewById(R.id.txt_email);
+        txtDireccion =(EditText)findViewById(R.id.txt_direccion);
+        btnAceptar=(Button)findViewById(R.id.btn_siguiente);
         usuario=getIntent().getParcelableExtra("usuario");
         tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
     }
 
-    public void btn_aceptar(View view){
+    public void btn_siguiente(View view){
         if(validaciones()){
-            usuario.setUsuUCorreo(txt_correo.getText().toString());
-            usuario.setUsuUDireccion(txt_direccion.getText().toString());
+            usuario.setUsuUCorreo(txtCorreo.getText().toString());
+            usuario.setUsuUDireccion(txtDireccion.getText().toString());
 
             Intent intent=new Intent(datospersonales2.this, configuracionUsuario.class);
             intent.putExtra("usuario", usuario);

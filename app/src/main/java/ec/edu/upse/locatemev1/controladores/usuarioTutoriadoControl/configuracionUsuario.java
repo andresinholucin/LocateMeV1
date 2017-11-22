@@ -30,9 +30,9 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class configuracionUsuario extends AppCompatActivity {
     CheckBox chk_sms;
-    Button btn_cancelar;
+
     Button btn_aceptar;
-    String chk;
+
     Spinner sp_tiemposensado;
     Spinner sp_perimetro;
 
@@ -94,13 +94,15 @@ public class configuracionUsuario extends AppCompatActivity {
 
         validacionesIniciales();
         //Toast.makeText(this,"usuario "+ usuario,Toast.LENGTH_LONG).show();
-        Toast.makeText(this, accion,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, accion,Toast.LENGTH_LONG).show();
     }
 
     public void anadirElementos(){
         sp_perimetro=(Spinner)findViewById(R.id.sp_perimetro);
         sp_tiemposensado=(Spinner)findViewById(R.id.sp_tiempoSensado);
-        chk_sms=(CheckBox)findViewById(R.id.checkBoxsms);
+        chk_sms=(CheckBox)findViewById(R.id.chk_sms);
+        btn_aceptar=(Button)findViewById(R.id.btn_aceptar);
+
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
         usuario=getIntent().getParcelableExtra("usuario");
         accion=getIntent().getStringExtra("accion");
@@ -138,8 +140,12 @@ public class configuracionUsuario extends AppCompatActivity {
         }
 
         if(accion==null){
-            Toast.makeText(this, "accion nulo", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "accion nulo", Toast.LENGTH_SHORT).show();
+            btn_aceptar.setText("Aceptar");
+
         }else if(accion.equals("menuconfigurar")){
+            btn_aceptar.setText("Editar");
+
             //este codigo se ejecuta cuando de la lista de tutoreados nos movemos a la configuracion del tutoreado
             Toast.makeText(this, " estas listo", Toast.LENGTH_SHORT).show();
             //desactivar combos
@@ -159,20 +165,34 @@ public class configuracionUsuario extends AppCompatActivity {
     }
 
     public void btn_aceptar(View view){
-        if (validaciones()){
-            usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
-            usuario.setPerimetroSensado(perimetroSeleccionado);
-            usuario.setTiempoSensado(tiempoSensadoSeleccionado);
 
-            System.out.println(usuario);
-            new HttpEnviaPostUsuario().execute();
+            if(accion==null){
+                //guardar un usuario nuevo
+                usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
+                usuario.setPerimetroSensado(perimetroSeleccionado);
+                usuario.setTiempoSensado(tiempoSensadoSeleccionado);
+                System.out.println(usuario);
+                new HttpEnviaPostUsuario().execute();
 
-        }
+            }else if(btn_aceptar.getText().equals("Editar")){
+                //Habilita la edicion de los controles
+                Toast.makeText(this,"modifica",Toast.LENGTH_SHORT).show();
+                sp_tiemposensado.setEnabled(true);
+                sp_perimetro.setEnabled(true);
+                chk_sms.setEnabled(true);
+                btn_aceptar.setText("Actualizar");
+
+            }
+
 
     }
 
     public boolean validaciones(){
-    return true;
+        return true;
+    }
+
+    public void btn_cancelar(View view){
+
     }
 
     private class HttpListaTiempoSensado extends AsyncTask<Void, Void, Void > {

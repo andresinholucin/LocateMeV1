@@ -26,12 +26,11 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 public class datospersonales1 extends AppCompatActivity {
 
     Button buttonfecha;
-    EditText textfecha;
+    EditText txt_fecha;
     private int dia,mes,anio;
-
+    EditText txtFecha;
     EditText txt_cedula;
-    EditText txt_telefono;
-
+    EditText txtCedula;
     Button btnsiguiente;
     Usuario usuario;
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
@@ -60,9 +59,8 @@ public class datospersonales1 extends AppCompatActivity {
     }
 
     public void anadirElementos(){
-        buttonfecha= (Button)findViewById(R.id.btn_fecha);
-        textfecha=(EditText)findViewById(R.id.editTextfechanacimiento);
-        txt_cedula=(EditText)findViewById(R.id.editTextcedula);
+        txtFecha =(EditText)findViewById(R.id.txt_fechaNacimiento);
+        txtCedula =(EditText)findViewById(R.id.txt_cedula);
         //txt_telefono=(EditText)findViewById(R.id.editTexttelefono);
         btnsiguiente=(Button)findViewById(R.id.btn_siguiente);
         usuario=getIntent().getParcelableExtra("usuario");
@@ -81,13 +79,20 @@ public class datospersonales1 extends AppCompatActivity {
             intent.putExtra("usuario", usuario);
             intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
             startActivity(intent);
-
         }
 
     }
 
     public Boolean validaciones(){
-        return true;
+        String cedula= txt_cedula.getText().toString();
+        String fecha= txt_fecha.getText().toString();
+        if(cedula.isEmpty()){
+            txt_cedula.setError("Ingrese Cedula");
+            return false;
+        }else if(fecha.isEmpty()){
+            txt_fecha.setError("Seleccione una Fecha");
+            return false;
+        }else return true;
     }
 
     public void btn_fecha(View view){
@@ -98,17 +103,17 @@ public class datospersonales1 extends AppCompatActivity {
         DatePickerDialog datePickerDialog= new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textfecha.setText(dayOfMonth + " / " + (month +1 ) + " / " + year);
+                txt_fecha.setText(dayOfMonth + " / " + (month +1 ) + " / " + year);
                 dia=dayOfMonth;
                 mes=month+1;
                 anio=year;
-                Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
             }
         }
                 ,dia,mes,anio);
 
         datePickerDialog.show();
-        Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
     }
 
 

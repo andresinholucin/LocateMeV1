@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ec.edu.upse.locatemev1.R;
-import ec.edu.upse.locatemev1.controladores.tabsControl.TabAlertasFragment;
-import ec.edu.upse.locatemev1.controladores.tabsControl.TabTutoriadosFragment;
-import ec.edu.upse.locatemev1.controladores.tabsControl.TabUbicacionFragment;
 
 public class MenuFragment extends Fragment {
     private AppBarLayout appBar;

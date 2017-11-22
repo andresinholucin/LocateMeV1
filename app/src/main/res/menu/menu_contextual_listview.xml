@@ -8,5 +8,5 @@
         android:title="@string/action_configuraciones_item"/>
     <item
         android:id="@+id/action_mapa"
-        android:title="@string/action_ubicarmapa_item"/>
+        android:title="@string/action_ubicar_mapa_item"/>
 </menu>

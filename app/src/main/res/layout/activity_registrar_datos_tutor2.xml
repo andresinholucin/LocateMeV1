@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.usuariocontrasenia"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -21,8 +19,8 @@
 
         <TextView
             style="@style/TextViewtStyle"
-            android:text="@string/txt_titulo_usuario_contrasenia"
-            android:id="@+id/txt_tutor" />
+            android:text="@string/txt_titulo_nacimiento_celular"
+            android:id="@+id/txtTutor" />
 
         <!--Space
             android:layout_width="match_parent"
@@ -31,56 +29,45 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.07">
+            android:layout_height="wrap_content">
             <EditText
                 style="@style/EditTextStyle"
-                android:id="@+id/txt_usuario"
-                android:hint="@string/txt_usuario"
-                android:inputType="text"
-                android:maxLength="10" />
+                android:id="@+id/txt_fechaNacimiento"
+                android:hint="@string/txt_fecha_nacimiento"
+                android:focusable="false"
+
+                />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/colorAccent"
-            app:counterMaxLength="8">
-
+            app:counterMaxLength="10"
+            app:counterOverflowTextAppearance="@style/AppTheme.CharacterCounter">
             <EditText
-                style="@style/EditTextStyle"
-                android:inputType="textPassword"
-                android:id="@+id/txt_pass"
-                android:hint="@string/txt_contrasenia" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/colorAccent"
-            app:counterMaxLength="8">
-
-            <EditText
-                style="@style/EditTextStyle"
-                android:inputType="textPassword"
-                android:id="@+id/txt_passRepetir"
-                android:hint="@string/txt_repetir_contrasenia"/>
+               style="@style/EditTextStyle"
+                android:layout_alignRight="@+id/txt_fechaNacimiento"
+                android:layout_alignEnd="@+id/txt_fechaNacimiento"
+                android:inputType="phone"
+                android:id="@+id/txt_telefono"
+                android:hint="@string/txt_telefono"
+                android:layout_marginTop="40dip"
+                 />
         </android.support.design.widget.TextInputLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1" />
+
         <Button
             style="@style/buttonStyle"
             android:id="@+id/btn_siguiente"
-            android:onClick="btn_siguiente"
             android:text="@string/btn_siguiente"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="41dp"
+            android:layout_marginTop="40dip"
+            android:onClick="irInterfaz"
             />
+
 
     </LinearLayout>
 </ScrollView>

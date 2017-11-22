@@ -25,14 +25,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
+import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
-import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.nombreapellido;
-import ec.edu.upse.locatemev1.modelo.Usuario;
-import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.perfilUsuarioTutoreado;
 import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.configuracionUsuario;
+import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.nombreapellido;
+import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.perfilUsuarioTutoreado;
+import ec.edu.upse.locatemev1.modelo.Usuario;
 
-public class TabTutoriadosFragment extends Fragment{
-
+public class TabTutoriadosFragment extends Fragment {
+    ParametrosConexion conexion = new ParametrosConexion();
     List<Usuario> listaUsuarios= new ArrayList<Usuario>();
     List<String> lst_Usuario= new ArrayList<String>();
     //List<String> lst_UbicacionUsuario = new ArrayList<String>();
@@ -41,10 +42,12 @@ public class TabTutoriadosFragment extends Fragment{
     ArrayAdapter<String> adaptador ;
     Usuario usuarioSeleccionado;
     FloatingActionButton floatingActionButton;
-
     //ArrayAdapter<Usuario> adaptador ;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    VariablesGenerales variablesGenerales;
+    List<Usuario> usuarioportutor;
 
     public TabTutoriadosFragment(){}
 
@@ -58,7 +61,8 @@ public class TabTutoriadosFragment extends Fragment{
         lista = (ListView) view.findViewById(R.id.listaTutoriado);
         floatingActionButton=(FloatingActionButton)view.findViewById(R.id.flotingaction);
         System.out.println("llega con: "+ VariablesGenerales.getIntPeticionTutoriado());
-
+        variablesGenerales = ((VariablesGenerales)getActivity().getApplicationContext());
+        validacionesIniciales();
 
         //boton flotante para añadir agregar nuevos usuarios
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -69,17 +73,21 @@ public class TabTutoriadosFragment extends Fragment{
             }
         });
 
-        if(VariablesGenerales.getIntPeticionTutoriado()==0) {
+    /*    if(VariablesGenerales.getIntPeticionTutoriado()==0) {
             new HttpListaTutoreado().execute();
+
             adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
             adaptador.notifyDataSetChanged();
             lista.setAdapter(adaptador);
             VariablesGenerales.setIntPeticionTutoriado(1);
-        }else {
+        }
+        else
+        {
+
             adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
             lista.setAdapter(adaptador);
         }
-
+*/
         lista.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -91,6 +99,7 @@ public class TabTutoriadosFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(parent.getItemAtPosition(position));
+
                 String usu;
                 for(Usuario u:listaUsuarios ){
                     usu=u.getUsuUNombres()+" "+u.getUsuUApellidos();
@@ -105,7 +114,30 @@ public class TabTutoriadosFragment extends Fragment{
         });
 
         registerForContextMenu(lista);
+
+
         return  view;
+
+    }
+
+
+
+    public void validacionesIniciales(){
+            usuarioportutor= variablesGenerales.getListaUsuariosPorTutor();
+
+            if(usuarioportutor==null){
+                new HttpListaTutoreado().execute();
+            }else{
+                for(int i=0 ; i<listaUsuarios.size();i++)
+                {
+                    System.out.println(listaUsuarios.get(i).getIdusuario()+" "+listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
+                    lst_Usuario.add(listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
+                }
+
+                adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
+                adaptador.notifyDataSetChanged();
+                lista.setAdapter(adaptador);
+            }
     }
 
 
@@ -113,7 +145,7 @@ public class TabTutoriadosFragment extends Fragment{
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final String url =VariablesGenerales.strRuta+"usuario/udt/"+VariablesGenerales.getLonIdTutor();
+                final String url = conexion.urlcompeta("usuario","udt/"+ VariablesGenerales.getLonIdTutor());
                 Usuario usuario = new Usuario();
 
 
@@ -129,18 +161,7 @@ public class TabTutoriadosFragment extends Fragment{
                 {
                     System.out.println(listaUsuarios.get(i).getIdusuario()+" "+listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
                     lst_Usuario.add(listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
-
                 }
-
-
-                //listaUsuarios = Arrays.asList(response.getBody());
-                // for(Usuario usuario: listaUsuarios){
-                //usuario.getIdusuario();
-                //listaUsuarios.add(usuario);
-                //System.out.println(String.valueOf(usuario.getIdusuario()));
-                //System.out.println(String.valueOf(usuario.getUsuUApellidos()));
-                //}
-                //return listaUsuarios;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -150,13 +171,13 @@ public class TabTutoriadosFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            variablesGenerales.setListaUsuariosPorTutor(listaUsuarios);
             adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
-            //adaptador.notifyDataSetChanged();
+            adaptador.notifyDataSetChanged();
             lista.setAdapter(adaptador);
-
-
         }
     }
+
 
 
 
@@ -212,5 +233,65 @@ public class TabTutoriadosFragment extends Fragment{
         return true;
     }
 
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Toast.makeText(getActivity(), "onResume", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(getActivity(), "onDestroy", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(getActivity(), "onDestroy", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Toast.makeText(getActivity(), "onStart", Toast.LENGTH_LONG).show();
+    }
+
+    /*
+    HttpClient recuperaLista = new HttpClient(new OnHttpRequestComplete() {
+            @Override
+            public void onComplete(Response status) {
+                if(status.isSuccess()){
+
+                    Gson gson = new GsonBuilder().create();
+                    try {
+
+                        System.out.println("lista : "+status.getResult());
+
+                        //JSONObject jsono = new JSONObject(status.getResult());
+                        //JSONArray jsonarray = jsono.getJSONArray("Usuario");
+                        //TypeToken<List<Usuario>> token = new TypeToken<List<Usuario>>() {
+                        //};
+                        //List<Usuario> usuarios = gson.fromJson(json);
+                       // for(int i = 0; i < jsonarray.length(); i++) {
+                        //    String strUsu = jsonarray.getString(i);
+                        //    Usuario usu = gson.fromJson(strUsu,Usuario.class);
+                        //    usuarios.add(usu);
+                        //}
+
+                    }catch (Exception e){
+                        System.out.println("Fallo! "+e.toString());
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+   */
 }
 

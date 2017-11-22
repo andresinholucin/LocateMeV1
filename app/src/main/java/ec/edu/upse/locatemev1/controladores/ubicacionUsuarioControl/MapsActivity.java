@@ -10,9 +10,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -642,7 +642,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if( distancias <= VariablesGenerales.intRango && distancias > 0.00)
             {
-               // actualizarUbicacion.excecute("http://192.168.1.125:8080/WebServiceAlertasSpring/api/ubicacionusuario/actualizarUbicacion/"+idubicacion_r);
+                // actualizarUbicacion.excecute("http://192.168.1.125:8080/WebServiceAlertasSpring/api/ubicacionusuario/actualizarUbicacion/"+idubicacion_r);
                 //Toast.makeText(this,Integer.parseInt(idubicacion_r),Toast.LENGTH_LONG).show();
                 //Toast.makeText(this,"Actualizar Ubicacion",Toast.LENGTH_LONG).show();
                 //ActualizarUbicacion(h_fin,Integer.parseInt(idubicacion_r));
@@ -661,7 +661,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             distancias =  distancia(lat,lon, latini,lonini);
             Toast.makeText(this,""+distancias,Toast.LENGTH_LONG).show();
             if(distancias !=0.00 ) {
-               // recuperaIdUbicacion.excecute("http://192.168.1.101:8080/WebServiceAlertasSpring/api/ubicacionusuario/guardarUbicacion/"+GuardarUbicacion());
+                // recuperaIdUbicacion.excecute("http://192.168.1.101:8080/WebServiceAlertasSpring/api/ubicacionusuario/guardarUbicacion/"+GuardarUbicacion());
                 //registrarUbicacion(latini, lonini);
                 Toast.makeText(this, "Guardado con Exito", Toast.LENGTH_LONG).show();
                 // Toast.makeText(this, "Lat: "+posicionInicial+" Long: "+posicionFinal,Toast.LENGTH_LONG).show();

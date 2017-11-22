@@ -1,75 +1,107 @@
 package ec.edu.upse.locatemev1.controladores.principal;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ec.edu.upse.locatemev1.R;
+import ec.edu.upse.locatemev1.configuracion.AuxDevolucion;
+import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.controladores.tabsControl.MenuActivity;
-import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.nombreapellido;
+import ec.edu.upse.locatemev1.controladores.usuarioTutorControl.PerfilUsuarioTutor;
+import ec.edu.upse.locatemev1.controladores.usuarioTutorControl.RegistrarDatosTutor;
 import ec.edu.upse.locatemev1.modelo.MetodosGenerales;
 
 public class MainActivity extends AppCompatActivity {
-
-
+    VariablesGenerales variablesGenerales;
+    ParametrosConexion conexion = new ParametrosConexion();
     public static final String MyPREFERENCES = "MyPrefs" ;
-    EditText Edi_Usuario,Edi_Password;
-     @Override
+    EditText txtUsuario,txtPassword;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        iniciarvariables();
-        CargarPreferencias();
 
-     }
-
-        public void limpiarvariables(){
-        Edi_Usuario.setText("");
-        Edi_Password.setText("");
-    }
-
-    public void CargarPreferencias(){
+        super.onCreate(savedInstanceState);
+        //Cargar la preferencia de inicio de sesion
         SharedPreferences miPreferencia = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        Edi_Usuario.setText(miPreferencia.getString("usuario",""));
-        Edi_Password.setText(miPreferencia.getString("clave",""));
-        if(Edi_Usuario.getText().length()!=0 && Edi_Password.getText().length()!=0)
-            new HttpRecuperarId().execute();
-    }
+        String StrSesion = miPreferencia.getString("sesion","");
 
-    public void GuardarPreferencias(){
+        // verificar si hay preferencia
+        if(StrSesion !=""){
+            new HttpRecuperarId().execute();
+            iniciarvariables();
+            System.out.println("Aki llega XD");
+        }else
+        {
+            setContentView(R.layout.activity_main);
+            iniciarvariables();
+        }
+
+    }
+    //metodo para guardar preferencias del usuario
+    public void GuardarPreferenciasId(Long tipo, Long id ){
         SharedPreferences miPreferencia = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = miPreferencia.edit();
-        String Str_usuario  = Edi_Usuario.getText().toString();
-        String Str_Clave  = Edi_Password.getText().toString();
-        editor.putString("usuario", Str_usuario);
-        editor.putString("clave", Str_Clave);
+        String StrTipo  = String.valueOf(tipo);
+        String StrUsuario  = String.valueOf(id);
+        editor.putString("tipo", StrTipo);
+        editor.putString("id", StrUsuario);
         editor.commit();
     }
+    //metodo para guardar preferencias de la sesion
+    public void GuardarPreferenciaSesion(){
+        SharedPreferences miPreferencia = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = miPreferencia.edit();
+        String StrSesion  =  "InicioSesion";
+        editor.putString("sesion", StrSesion);
+        editor.commit();
+    }
+    //metodo para iniciar variables de la actividad
     public void iniciarvariables(){
-        Edi_Usuario= (EditText) findViewById(R.id.txtUsuario);
-        Edi_Password= (EditText) findViewById(R.id.txtPassword);
-
+        txtUsuario= (EditText) findViewById(R.id.txt_usuario);
+        txtPassword= (EditText) findViewById(R.id.txt_password);
+        variablesGenerales = ((VariablesGenerales)getApplicationContext());
     }
 
-    public void InicioSesion(View view){
+    public void inicioSesion(View view){
         try {
-            if(Edi_Usuario.length()==0 &&  Edi_Password.length()==0)
+            if(txtUsuario.length()==0 &&  txtPassword.length()==0)
+            {
                 Toast.makeText(MainActivity.this,"Ingrese Usuario y Clave", Toast.LENGTH_LONG).show();
-            else
-                new HttpRecuperarId().execute();
-                //recuperarId.excecute(VariablesGenerales.strRuta+"usuario/login/"+Edi_Usuario.getText().toString()+"/"+Edi_Password.getText().toString());
+            }
+            else {
+                final ProgressDialog dialogo = new ProgressDialog(MainActivity.this, R.style.AppTheme_Dark_Dialog);
 
+                dialogo.setIndeterminate(true);
+                dialogo.setMessage("Autentificando...");
+                dialogo.show();
+                long delayInMillis = 5000;
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        dialogo.dismiss();
+                        new HttpRecuperarId().execute();
+                    }
+                }, delayInMillis);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -78,81 +110,181 @@ public class MainActivity extends AppCompatActivity {
 
     private class HttpRecuperarId extends AsyncTask<Void, Void, Void > {
 
-        String Str_Usuario  = Edi_Usuario.getText().toString();
-        String Str_Clave  = Edi_Password.getText().toString();
+        //Cargar las preferencias del tipo y el id del usuario cuando inicia sesion
+        SharedPreferences miPreferencia = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String strTipo = miPreferencia.getString("tipo","");
+        String strUsuario = miPreferencia.getString("id","");
+
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                //String url =VariablesGenerales.strRuta+"usuario/login/alberto/12345";
-                String url =VariablesGenerales.strRuta+"usuario/login/"+Str_Usuario +"/"+ MetodosGenerales.cryptMD5(Str_Clave);
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                //verificar si hay datos en las preferencias
+                if(strTipo ==""){
+                    // parametros de la url + nombre de la WS+ el metodo
+                    String url = conexion.urlcompeta("usuario","login/"+txtUsuario.getText().toString()+"/"+ MetodosGenerales.cryptMD5(txtPassword.getText().toString()));
+                    System.out.println(url);
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                    ResponseEntity<AuxDevolucion> response=restTemplate.getForEntity(url,AuxDevolucion.class);
 
-                ResponseEntity<Long>  response=restTemplate.getForEntity(url,Long.class);
-                if (response.getBody()>0)
-                {
-                    Long Lon_IdTutor = response.getBody();
-                    //Toast.makeText(MainActivity.this,"id: "+Long.parseLong(id), Toast.LENGTH_LONG).show();
-                    System.out.println("id: "+Lon_IdTutor);
-                    GuardarPreferencias();
-                    VariablesGenerales.setLonIdTutor(Lon_IdTutor);
-                    finish();
-
-                    VariablesGenerales.setIntPeticionTutoriado(0);
-                    VariablesGenerales.setIntPeticionAlerta(0);
-
-                    Intent intent = new Intent(MainActivity.this,MenuActivity.class);
-                    startActivity(intent);
-                }
-
-                //System.out.println("imprime esto : "+response.getBody());
-                //listaUsuarios = Arrays.asList(response.getBody());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                //Log.e("MainActivity", e.getMessage(), e);
-            }
-            return null;
-        }
-    }
-
-/*
-    HttpClient recuperarId = new HttpClient(new OnHttpRequestComplete() {
-
-        @Override
-        public void onComplete(Response status) {
-
-            if(status.isSuccess()){
-                try {
-                    if(status.getResult()!="")
+                    //verificar si no biene null
+                    if (response.getBody().getIdUsuario()!=null)
                     {
-                        String id = status.getResult();
-                        Toast.makeText(MainActivity.this,"id: "+Long.parseLong(id), Toast.LENGTH_LONG).show();
-                        //System.out.println("id: "+Long.parseLong(id));
-                        GuardarPreferencias();
-                        VariablesGenerales.setLonIdTutor(Long.parseLong(id));
-                        finishAffinity();
-                        //VariablesGenerales.setLonIdUsuario(Long.parseLong(id));
-                        Intent intent = new Intent(MainActivity.this,MenuActivity.class);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(MainActivity.this, "Usuario o Clave incorrecta", Toast.LENGTH_LONG).show();
+                        // guardar preferencias para la sesion
+                        GuardarPreferenciaSesion();
+                        //verificar quien es mi tutor o tutoriado por el tipo
+                        if(response.getBody().getTipoUsuario()==1)
+                        {
+                            //obtener el id del usuario
+                            Long id = response.getBody().getIdUsuario();
+                            //guardar en las preferencias el tipo y el id del usuario
+                            GuardarPreferenciasId(response.getBody().getTipoUsuario(),id);
+                            // obtener el token
+                            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                            System.out.println("TOKEN:   "+refreshedToken);
+
+                            //guardar el id del tutor en variables generales para utilizar en otras actividades
+                            VariablesGenerales.setLonIdTutor(id);
+                            // finalizar la actividad actual
+                            finish();
+
+                            //VariablesGenerales.setIntPeticionTutoriado(0);
+                            VariablesGenerales.setIntPeticionAlerta(0);
+                            // llamar a la siguiente actividad
+                            Intent intent = new Intent(MainActivity.this,MenuActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            //obtener el id del usuario
+                            Long id = response.getBody().getIdUsuario();
+                            //guardar en las preferencias el tipo y el id del usuario
+                            GuardarPreferenciasId(response.getBody().getTipoUsuario(),id);
+                            // finalizar la actividad actual
+                            finish();
+                            // llamar a la siguiente actividad
+                            Intent intent = new Intent(MainActivity.this,MainTutoreadoActivity.class);
+                            startActivity(intent);
+                        }
 
                     }
 
-                }catch (Exception e){
-                    System.out.println("Fallo! "+e.toString());
-                    e.printStackTrace();
+                }
+                else{
+                    //verificar quien es mi tutor o tutoriado por el tipo
+                    if(Long.valueOf(strTipo)==1){
+                        // finalizar la actividad actual
+                        finish();
+
+                        VariablesGenerales.setLonIdTutor(Long.valueOf(strUsuario));
+
+                        //VariablesGenerales.setIntPeticionTutoriado(0);
+
+                        VariablesGenerales.setIntPeticionAlerta(0);
+
+                        // llamar a la siguiente actividad
+                        Intent intent = new Intent(MainActivity.this,MenuActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        // finalizar la actividad actual
+                        finish();
+                        // llamar a la siguiente actividad
+                        Intent intent = new Intent(MainActivity.this,MainTutoreadoActivity.class);
+                        startActivity(intent);
+                    }
+
                 }
 
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
             }
-            else
-            {
-                //Toast.makeText(MainActivity.this, "No hay Datos", Toast.LENGTH_LONG).show();
-            }
+            return null;
         }
-    });
-*/
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+        }
+    }
+
+    /*
+        HttpClient recuperarId = new HttpClient(new OnHttpRequestComplete() {
+
+            @Override
+            public void onComplete(Response status) {
+
+                if(status.isSuccess()){
+                    try {
+                        if(status.getResult()!="")
+                        {
+                            String id = status.getResult();
+                            Toast.makeText(MainActivity.this,"id: "+Long.parseLong(id), Toast.LENGTH_LONG).show();
+                            //System.out.println("id: "+Long.parseLong(id));
+                            GuardarPreferencias();
+                            VariablesGenerales.setLonIdTutor(Long.parseLong(id));
+                            finishAffinity();
+                            //VariablesGenerales.setLonIdUsuario(Long.parseLong(id));
+                            Intent intent = new Intent(MainActivity.this,MenuActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(MainActivity.this, "Usuario o Clave incorrecta", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }catch (Exception e){
+                        System.out.println("Fallo! "+e.toString());
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                {
+                    //Toast.makeText(MainActivity.this, "No hay Datos", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    */
+    public void irInterfaz(View view)
+    {
+        Intent intent = null;
+        switch (view.getId())
+        {
+            /*case R.id.btnConectar:
+                String usuario=txtUsuario.getText().toString();
+                String password=txtPassword.getText().toString();
+
+                if (validarusuario(usuario,password)) {
+                    intent = new Intent(this, Ingresar.class);
+                    intent.putExtra(password,usuario);
+                    GuardarPreferencias();
+                    Toast.makeText(getApplicationContext(), "Redireccionando...", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrectas",Toast.LENGTH_SHORT).show();
+                    limpiarvariables();
+                    break;
+                }
+                break;*/
+
+            case R.id.btn_registrar:
+                intent = new Intent(this,RegistrarDatosTutor.class);
+                break;
+            case R.id.btn_editar:
+                intent = new Intent(this,PerfilUsuarioTutor.class);
+                break;
+
+        }
+
+        if (intent != null) {
+            startActivity(intent);
+        }
+
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
