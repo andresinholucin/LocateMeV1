@@ -30,12 +30,13 @@
             android:id="@+id/til_cedula"
             app:counterMaxLength="10"
             app:counterOverflowTextAppearance="@style/AppTheme.CharacterCounter">
+
             <EditText
-                style="@style/EditTextStyle"
-                android:inputType="numberSigned"
-                android:hint="@string/txt_cedula"
                 android:id="@+id/txt_cedula"
-                android:layout_marginTop="40dip"/>
+                style="@style/EditTextStyle"
+                android:layout_marginTop="40dip"
+                android:hint="@string/txt_cedula"
+                android:inputType="numberSigned" />
 
         </android.support.design.widget.TextInputLayout>
 

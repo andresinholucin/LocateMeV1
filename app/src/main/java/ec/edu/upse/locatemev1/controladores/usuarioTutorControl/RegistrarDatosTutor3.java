@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
-import ec.edu.upse.locatemev1.modelo.MetodosGenerales;
+import ec.edu.upse.locatemev1.configuracion.MetodosGenerales;
 import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class RegistrarDatosTutor3 extends AppCompatActivity {

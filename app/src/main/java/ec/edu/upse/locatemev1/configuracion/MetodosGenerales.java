@@ -1,4 +1,4 @@
-package ec.edu.upse.locatemev1.modelo;
+package ec.edu.upse.locatemev1.configuracion;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

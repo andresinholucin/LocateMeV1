@@ -27,7 +27,7 @@ import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.controladores.tabsControl.MenuActivity;
 import ec.edu.upse.locatemev1.controladores.usuarioTutorControl.PerfilUsuarioTutor;
 import ec.edu.upse.locatemev1.controladores.usuarioTutorControl.RegistrarDatosTutor;
-import ec.edu.upse.locatemev1.modelo.MetodosGenerales;
+import ec.edu.upse.locatemev1.configuracion.MetodosGenerales;
 
 public class MainActivity extends AppCompatActivity {
     VariablesGenerales variablesGenerales;

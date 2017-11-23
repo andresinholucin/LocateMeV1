@@ -17,7 +17,7 @@ import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
-import ec.edu.upse.locatemev1.modelo.MetodosGenerales;
+import ec.edu.upse.locatemev1.configuracion.MetodosGenerales;
 import ec.edu.upse.locatemev1.modelo.Usuario;
 
 

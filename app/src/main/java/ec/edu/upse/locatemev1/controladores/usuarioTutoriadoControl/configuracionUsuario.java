@@ -1,7 +1,10 @@
 package ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -164,7 +167,7 @@ public class configuracionUsuario extends AppCompatActivity {
 
     }
 
-    public void btn_aceptar(View view){
+    public void aceptar(View view){
 
             if(accion==null){
                 //guardar un usuario nuevo
@@ -189,10 +192,6 @@ public class configuracionUsuario extends AppCompatActivity {
 
     public boolean validaciones(){
         return true;
-    }
-
-    public void btn_cancelar(View view){
-
     }
 
     private class HttpListaTiempoSensado extends AsyncTask<Void, Void, Void > {
@@ -231,11 +230,6 @@ public class configuracionUsuario extends AppCompatActivity {
 
     private class HttpListaPerimetros extends AsyncTask<Void, Void, Void > {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected Void doInBackground(Void... params) {
             try {
                 final String url=con.urlcompeta("usuariotutoreado","perimetros/");
@@ -263,7 +257,6 @@ public class configuracionUsuario extends AppCompatActivity {
         }
     }
 
-
     private class HttpEnviaPostUsuario extends AsyncTask<Void, Void, Void > {
         @Override
         protected Void doInBackground(Void... params) {
@@ -272,13 +265,54 @@ public class configuracionUsuario extends AppCompatActivity {
                 final String url=con.urlcompeta("usuariotutoreado","registraUsuarioTutoreado/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
+                final Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
                 System.out.println(usu.toString());
+                //mensajeConfirmacion(usu);
                 //return listaUsuarios;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }
             return null;
         }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
     }
+
+    public void mensajeConfirmacion(Usuario usu){
+        final Usuario usua=usu;
+        if(usua!=null){
+            AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
+            builder.setMessage("Usuario Tutoreado Creado");
+            builder.setTitle("Confirmacion");
+            builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent =new Intent(getApplicationContext(),perfilUsuarioTutoreado.class);
+                    intent.putExtra("usuario", usua);
+                    startActivity(intent);
+                }
+            });
+
+            AlertDialog dialog=builder.create();
+            dialog.show();
+        }else{
+            AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
+            builder.setMessage("Usuario No fue Creado");
+            builder.setTitle("Confirmacion");
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog dialog=builder.create();
+            dialog.show();
+        }
+    }
+
 }
