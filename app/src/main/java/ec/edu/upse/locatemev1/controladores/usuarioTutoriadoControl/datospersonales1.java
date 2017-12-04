@@ -42,7 +42,7 @@ public class datospersonales1 extends AppCompatActivity {
     ParametrosConexion con =new ParametrosConexion();
     String errorCedula;
     MetodosGenerales metodosGenerales=new MetodosGenerales();
-
+    Boolean ced=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,10 +118,6 @@ public class datospersonales1 extends AppCompatActivity {
         }else if(!metodosGenerales.validadorDeCedula(cedula)){
             txtCedula.setError("Cedula Incorrecto");
         }
-        else
-        {
-            new HttpValidacionCedula().execute();
-        }
 
     }
 
@@ -144,36 +140,44 @@ public class datospersonales1 extends AppCompatActivity {
     public Boolean validaciones(){
         String cedula= txtCedula.getText().toString();
         String fecha= txtFecha.getText().toString();
+
         if(cedula.isEmpty()){
             txtCedula.setError("Ingrese Cedula");
             return false;
         }else if(fecha.isEmpty()){
             txtFecha.setError("Seleccione una Fecha");
             return false;
-        }else return true;
-    }
-/*
-    public void btn_fecha(View view){
-        final Calendar c= Calendar.getInstance();
-        dia=c.get(Calendar.DAY_OF_MONTH);
-        mes=c.get(Calendar.MONTH);
-        anio=c.get(Calendar.YEAR);
-        DatePickerDialog datePickerDialog= new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                txt_fecha.setText(dayOfMonth + " / " + (month +1 ) + " / " + year);
-                dia=dayOfMonth;
-                mes=month+1;
-                anio=year;
-                //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
-            }
+        }else if(!metodosGenerales.validadorDeCedula(cedula)){
+            txtCedula.setError("Cedula Incorrecto");
+            return false;
         }
-                ,dia,mes,anio);
 
-        datePickerDialog.show();
-        //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
+        //new HttpValidacionCedula().execute();
+        existecedula();
+        if(ced){
+            return false;
+        }
+
+        return true;
     }
-*/
+
+    public void existecedula(){
+        try {
+            String parametro;
+            parametro= "validacedula/"+txtCedula.getText().toString()+"/";
+            final String url=con.urlcompeta("usuariotutoreado",parametro);
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            ResponseEntity<Boolean> response= restTemplate.getForEntity(url, Boolean.class);
+            //listaTiempoSensado = Arrays.asList(response.getBody());
+            //System.out.println(response);
+            ced=response.getBody();
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+ced);
+        } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage(), e);
+
+        }
+    }
 
     private class HttpValidacionCedula extends AsyncTask<Void, Void, Void > {
         @Override
@@ -192,14 +196,11 @@ public class datospersonales1 extends AppCompatActivity {
                 ResponseEntity<Boolean> response= restTemplate.getForEntity(url, Boolean.class);
                 //listaTiempoSensado = Arrays.asList(response.getBody());
                 //System.out.println(response);
-                if(response.getBody()==true){
-                    System.out.println("la cedula ya fue registrada");
-                    errorCedula="Este Usuario ya fue registrado";
-                }else{
-                    System.out.println("la cedula no ha sido registrada");
-                }
+                ced=response.getBody();
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+ced);
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
+                return null;
             }
             return null;
         }
@@ -207,7 +208,9 @@ public class datospersonales1 extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-                txtCedula.setError(errorCedula);
+            if(ced){
+                txtCedula.setError("Este Usuario ya fue Registrado");
+            }
         }
     }
 }

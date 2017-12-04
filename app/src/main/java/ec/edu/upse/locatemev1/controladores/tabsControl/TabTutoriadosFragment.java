@@ -73,21 +73,7 @@ public class TabTutoriadosFragment extends Fragment {
             }
         });
 
-    /*    if(VariablesGenerales.getIntPeticionTutoriado()==0) {
-            new HttpListaTutoreado().execute();
 
-            adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
-            adaptador.notifyDataSetChanged();
-            lista.setAdapter(adaptador);
-            VariablesGenerales.setIntPeticionTutoriado(1);
-        }
-        else
-        {
-
-            adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
-            lista.setAdapter(adaptador);
-        }
-*/
         lista.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -109,18 +95,13 @@ public class TabTutoriadosFragment extends Fragment {
                         System.out.println("ENCONTRASTE IGUAL");
                     }
                 }
-
             }
         });
 
         registerForContextMenu(lista);
 
-
         return  view;
-
     }
-
-
 
     public void validacionesIniciales(){
             usuarioportutor= variablesGenerales.getListaUsuariosPorTutor();
@@ -140,21 +121,15 @@ public class TabTutoriadosFragment extends Fragment {
             }
     }
 
-
     private class HttpListaTutoreado extends AsyncTask<Void, Void, Void > {
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 final String url = conexion.urlcompeta("usuario","udt/"+ VariablesGenerales.getLonIdTutor());
                 Usuario usuario = new Usuario();
-
-
                 RestTemplate restTemplate = new RestTemplate();
-
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
                 ResponseEntity<Usuario[]> response= restTemplate.getForEntity(url, Usuario[].class);
-
                 listaUsuarios = Arrays.asList(response.getBody());
                 VariablesGenerales.setListUsuario(listaUsuarios);
                 for(int i=0 ; i<listaUsuarios.size();i++)
@@ -178,18 +153,13 @@ public class TabTutoriadosFragment extends Fragment {
         }
     }
 
-
-
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-
         menu.add(0,v.getId(),0,"Perfil");
         menu.add(1,v.getId(),1,"Configuraciones");
         menu.add(2,v.getId(),2,"Ubicar en el Mapa");
     }
-
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -209,8 +179,6 @@ public class TabTutoriadosFragment extends Fragment {
              Intent intent=new Intent(getContext(), perfilUsuarioTutoreado.class);
              intent.putExtra("usuario", usuarioSeleccionado);
              startActivity(intent);
-
-
             //Toast.makeText(getActivity(),"Selecciono Perfil",Toast.LENGTH_SHORT).show();
         }else if (item.getTitle()=="Configuraciones") {
              Intent intentConfiguraciones=new Intent(getContext(), configuracionUsuario.class);
@@ -220,78 +188,11 @@ public class TabTutoriadosFragment extends Fragment {
             //Toast.makeText(getActivity(), "Selecciono Configuraciones", Toast.LENGTH_SHORT).show();
         }else if (item.getTitle()=="Ubicar en el Mapa"){
              Toast.makeText(getActivity(), "Selecciono Ubicar en el Mapa", Toast.LENGTH_SHORT).show();
-
-
-
-
-
              //VariablesGenerales.setLonIdTutoriadosLista(listaUsuarios.get(i).getIdusuario());
-
-
         }
 
         return true;
     }
 
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Toast.makeText(getActivity(), "onResume", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getActivity(), "onDestroy", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(getActivity(), "onDestroy", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Toast.makeText(getActivity(), "onStart", Toast.LENGTH_LONG).show();
-    }
-
-    /*
-    HttpClient recuperaLista = new HttpClient(new OnHttpRequestComplete() {
-            @Override
-            public void onComplete(Response status) {
-                if(status.isSuccess()){
-
-                    Gson gson = new GsonBuilder().create();
-                    try {
-
-                        System.out.println("lista : "+status.getResult());
-
-                        //JSONObject jsono = new JSONObject(status.getResult());
-                        //JSONArray jsonarray = jsono.getJSONArray("Usuario");
-                        //TypeToken<List<Usuario>> token = new TypeToken<List<Usuario>>() {
-                        //};
-                        //List<Usuario> usuarios = gson.fromJson(json);
-                       // for(int i = 0; i < jsonarray.length(); i++) {
-                        //    String strUsu = jsonarray.getString(i);
-                        //    Usuario usu = gson.fromJson(strUsu,Usuario.class);
-                        //    usuarios.add(usu);
-                        //}
-
-                    }catch (Exception e){
-                        System.out.println("Fallo! "+e.toString());
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
-   */
 }
 

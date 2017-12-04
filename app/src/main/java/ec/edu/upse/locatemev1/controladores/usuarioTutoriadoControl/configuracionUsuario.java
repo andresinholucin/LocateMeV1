@@ -35,6 +35,7 @@ public class configuracionUsuario extends AppCompatActivity {
     CheckBox chk_sms;
 
     Button btn_aceptar;
+    Button bitton2;
 
     Spinner sp_tiemposensado;
     Spinner sp_perimetro;
@@ -105,6 +106,7 @@ public class configuracionUsuario extends AppCompatActivity {
         sp_tiemposensado=(Spinner)findViewById(R.id.sp_tiempoSensado);
         chk_sms=(CheckBox)findViewById(R.id.chk_sms);
         btn_aceptar=(Button)findViewById(R.id.btn_aceptar);
+        bitton2=(Button)findViewById(R.id.button2);
 
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
         usuario=getIntent().getParcelableExtra("usuario");
@@ -190,6 +192,32 @@ public class configuracionUsuario extends AppCompatActivity {
 
     }
 
+    public void aceptar2(View view){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("Usuario Tutoreado Creado");
+        builder.setTitle("Confirmacion");
+
+        builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                startActivity(intent);
+            }
+        });
+
+        AlertDialog dialog= builder.create();
+        dialog.show();
+
+    }
+
     public boolean validaciones(){
         return true;
     }
@@ -267,7 +295,8 @@ public class configuracionUsuario extends AppCompatActivity {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 final Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
                 System.out.println(usu.toString());
-                //mensajeConfirmacion(usu);
+
+                mensajeConfirmacion(usu);
                 //return listaUsuarios;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
@@ -285,13 +314,13 @@ public class configuracionUsuario extends AppCompatActivity {
     public void mensajeConfirmacion(Usuario usu){
         final Usuario usua=usu;
         if(usua!=null){
-            AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
             builder.setMessage("Usuario Tutoreado Creado");
             builder.setTitle("Confirmacion");
             builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent =new Intent(getApplicationContext(),perfilUsuarioTutoreado.class);
+                    Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
                     intent.putExtra("usuario", usua);
                     startActivity(intent);
                 }
@@ -299,8 +328,9 @@ public class configuracionUsuario extends AppCompatActivity {
 
             AlertDialog dialog=builder.create();
             dialog.show();
+
         }else{
-            AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
             builder.setMessage("Usuario No fue Creado");
             builder.setTitle("Confirmacion");
             builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -315,4 +345,30 @@ public class configuracionUsuario extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("Usuario Tutoreado Creado");
+        builder.setTitle("Confirmacion");
+
+        builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                startActivity(intent);
+            }
+        });
+
+        AlertDialog dialog= builder.create();
+        dialog.show();
+    }
 }
