@@ -91,7 +91,11 @@ public class MenuActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.nav_inicio) {
-            fragmentManager.beginTransaction().replace(R.id.contenedor,new MenuFragment()).commit();
+            //Intent intent = new Intent(getApplication(),MenuActivity.class);
+            //startActivity(intent);
+
+           fragmentManager.beginTransaction().replace(R.id.contenedor,new MenuFragment()).commit();
+
             // Handle the camera action
         } else if (id == R.id.nav_tutor) {
             Intent intent = new Intent(MenuActivity.this,PerfilUsuarioTutor.class);

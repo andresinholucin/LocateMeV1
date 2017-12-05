@@ -73,14 +73,16 @@
             app:counterOverflowTextAppearance="@style/AppTheme.CharacterCounter">
 
             <EditText
-                style="@style/EditTextStyle"
-                android:inputType="numberSigned"
-                android:hint="@string/txt_cedula"
                 android:id="@+id/txt_cedula"
-                android:layout_alignRight="@+id/txt_apellidosTutor"
+                style="@style/EditTextStyle"
                 android:layout_alignEnd="@+id/txt_apellidosTutor"
+                android:layout_alignRight="@+id/txt_apellidosTutor"
                 android:layout_marginTop="40dip"
-                android:maxLength="10"/>
+                android:hint="@string/txt_cedula"
+                android:inputType="numberSigned"
+                android:maxLength="10"
+                tools:focusable="true"
+                tools:focusableInTouchMode="true" />
 
         </android.support.design.widget.TextInputLayout>
 

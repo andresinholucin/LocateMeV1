@@ -39,7 +39,7 @@ public class TabTutoriadosFragment extends Fragment {
     //List<String> lst_UbicacionUsuario = new ArrayList<String>();
     //Long usuarioSelecionado;
     ListView lista;
-    ArrayAdapter<String> adaptador ;
+    ArrayAdapter<String> adaptador=null ;
     Usuario usuarioSeleccionado;
     FloatingActionButton floatingActionButton;
     //ArrayAdapter<Usuario> adaptador ;
@@ -55,13 +55,13 @@ public class TabTutoriadosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_tab_tutoriados, container, false);
         //System.out.println("llega aki 1");
         lista = (ListView) view.findViewById(R.id.listaTutoriado);
         floatingActionButton=(FloatingActionButton)view.findViewById(R.id.flotingaction);
         System.out.println("llega con: "+ VariablesGenerales.getIntPeticionTutoriado());
         variablesGenerales = ((VariablesGenerales)getActivity().getApplicationContext());
+
         validacionesIniciales();
 
         //boton flotante para añadir agregar nuevos usuarios
@@ -74,12 +74,12 @@ public class TabTutoriadosFragment extends Fragment {
         });
 
 
-        lista.setOnLongClickListener(new View.OnLongClickListener() {
+       /* lista.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 return false;
             }
-        });
+        });*/
         //seleccionar un usuario y llamar a menu emergente
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,18 +103,21 @@ public class TabTutoriadosFragment extends Fragment {
         return  view;
     }
 
+
     public void validacionesIniciales(){
             usuarioportutor= variablesGenerales.getListaUsuariosPorTutor();
 
             if(usuarioportutor==null){
+                Toast.makeText(getActivity(),"llenaste lista por primera vez", Toast.LENGTH_SHORT).show();
                 new HttpListaTutoreado().execute();
             }else{
-                for(int i=0 ; i<listaUsuarios.size();i++)
+                Toast.makeText(getActivity(),"llenar de variables generales", Toast.LENGTH_SHORT).show();
+                for(int i=0 ; i<usuarioportutor.size();i++)
                 {
-                    System.out.println(listaUsuarios.get(i).getIdusuario()+" "+listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
-                    lst_Usuario.add(listaUsuarios.get(i).getUsuUNombres()+" "+listaUsuarios.get(i).getUsuUApellidos());
+                    System.out.println(usuarioportutor.get(i).getIdusuario()+" "+usuarioportutor.get(i).getUsuUNombres()+" "+usuarioportutor.get(i).getUsuUApellidos());
+                    lst_Usuario.add(usuarioportutor.get(i).getUsuUNombres()+" "+usuarioportutor.get(i).getUsuUApellidos());
                 }
-
+                adaptador.clear();
                 adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
                 adaptador.notifyDataSetChanged();
                 lista.setAdapter(adaptador);

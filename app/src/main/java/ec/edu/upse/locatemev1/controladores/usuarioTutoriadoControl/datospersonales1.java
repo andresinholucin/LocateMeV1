@@ -62,6 +62,7 @@ public class datospersonales1 extends AppCompatActivity {
         calendario();
     }
 
+
     public void anadirElementos(){
         txtFecha =(EditText)findViewById(R.id.txt_fechaNacimiento);
         txtCedula =(EditText)findViewById(R.id.txt_cedula);
@@ -76,6 +77,7 @@ public class datospersonales1 extends AppCompatActivity {
         txtFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new HttpValidacionCedula().execute();
                 llamaCalendario();
             }
         });
@@ -110,7 +112,6 @@ public class datospersonales1 extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
     }
 
-
     public void validaCedula(){
         String cedula= txtCedula.getText().toString();
         if (cedula.isEmpty()){
@@ -118,10 +119,11 @@ public class datospersonales1 extends AppCompatActivity {
         }else if(!metodosGenerales.validadorDeCedula(cedula)){
             txtCedula.setError("Cedula Incorrecto");
         }
-
+        new HttpValidacionCedula().execute();
     }
 
     public void btn_siguiente(View view){
+
         if (validaciones()){
             usuario.setUsuUCedula(txtCedula.getText().toString());
             //usuario.setUsuUTelefono(txt_telefono.getText().toString());
@@ -152,9 +154,8 @@ public class datospersonales1 extends AppCompatActivity {
             return false;
         }
 
-        //new HttpValidacionCedula().execute();
-        existecedula();
         if(ced){
+            txtCedula.setError("Este Usuario ya fue Registrado");
             return false;
         }
 
@@ -188,16 +189,22 @@ public class datospersonales1 extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                String parametro;
-                parametro= "validacedula/"+txtCedula.getText().toString()+"/";
-                final String url=con.urlcompeta("usuariotutoreado",parametro);
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                ResponseEntity<Boolean> response= restTemplate.getForEntity(url, Boolean.class);
-                //listaTiempoSensado = Arrays.asList(response.getBody());
-                //System.out.println(response);
-                ced=response.getBody();
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+ced);
+                String parametro,id;
+                id=txtCedula.getText().toString();
+                if(!id.isEmpty()){
+                    parametro= "validacedula/"+id+"/";
+                    final String url=con.urlcompeta("usuariotutoreado",parametro);
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                    ResponseEntity<Boolean> response= restTemplate.getForEntity(url, Boolean.class);
+                    //listaTiempoSensado = Arrays.asList(response.getBody());
+                    //System.out.println(response);
+                    ced=response.getBody();
+                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+ced);
+                }else{
+                    ced=false;
+                }
+
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
                 return null;

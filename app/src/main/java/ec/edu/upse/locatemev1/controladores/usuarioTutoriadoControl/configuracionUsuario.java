@@ -1,9 +1,11 @@
 package ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class configuracionUsuario extends AppCompatActivity {
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
 
     String accion;
+    AlertDialog alert = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,13 @@ public class configuracionUsuario extends AppCompatActivity {
         validacionesIniciales();
         //Toast.makeText(this,"usuario "+ usuario,Toast.LENGTH_LONG).show();
         //Toast.makeText(this, accion,Toast.LENGTH_LONG).show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Importante");
+        builder.setMessage("Este es un programa solo de prueba y no la versión completa");
+        builder.setPositiveButton("OK",null);
+        builder.create();
+        builder.show();
     }
 
     public void anadirElementos(){
@@ -176,7 +186,7 @@ public class configuracionUsuario extends AppCompatActivity {
                 usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
                 usuario.setPerimetroSensado(perimetroSeleccionado);
                 usuario.setTiempoSensado(tiempoSensadoSeleccionado);
-                System.out.println(usuario);
+                //System.out.println(usuario);
                 new HttpEnviaPostUsuario().execute();
 
             }else if(btn_aceptar.getText().equals("Editar")){
@@ -285,9 +295,16 @@ public class configuracionUsuario extends AppCompatActivity {
         }
     }
 
-    private class HttpEnviaPostUsuario extends AsyncTask<Void, Void, Void > {
+    private class HttpEnviaPostUsuario extends AsyncTask<Void, Void, Usuario > {
+        AlertDialog.Builder builder;
         @Override
-        protected Void doInBackground(Void... params) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder = new AlertDialog.Builder(configuracionUsuario.this);
+        }
+
+        @Override
+        protected Usuario doInBackground(Void... params) {
             try {
                 //final String url = "http://172.19.11.195:8084/WebServiceAlertasSpring/api/usuariotutoreado/pruebapost/";
                 final String url=con.urlcompeta("usuariotutoreado","registraUsuarioTutoreado/");
@@ -296,79 +313,47 @@ public class configuracionUsuario extends AppCompatActivity {
                 final Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
                 System.out.println(usu.toString());
 
-                mensajeConfirmacion(usu);
+                return usu;
+                //mensajeConfirmacion(usu);
                 //return listaUsuarios;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
+                return null;
             }
-            return null;
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        protected void onPostExecute(final Usuario usu) {
+            super.onPostExecute(usuario);
+            if(usu!=null){
+                builder.setTitle("Confirmacion!");
+                builder.setMessage("Usuario Tutoreado Creado");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                        intent.putExtra("usuario", usu);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.show();
+            }else{
+                builder.setTitle("Confirmacion!");
+                builder.setMessage("Usuario No Pudo Ser Creado");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                builder.show();
+            }
 
         }
+
     }
 
-    public void mensajeConfirmacion(Usuario usu){
-        final Usuario usua=usu;
-        if(usua!=null){
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setMessage("Usuario Tutoreado Creado");
-            builder.setTitle("Confirmacion");
-            builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                    intent.putExtra("usuario", usua);
-                    startActivity(intent);
-                }
-            });
 
-            AlertDialog dialog=builder.create();
-            dialog.show();
-
-        }else{
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setMessage("Usuario No fue Creado");
-            builder.setTitle("Confirmacion");
-            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            AlertDialog dialog=builder.create();
-            dialog.show();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setMessage("Usuario Tutoreado Creado");
-        builder.setTitle("Confirmacion");
-
-        builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                startActivity(intent);
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                startActivity(intent);
-            }
-        });
-
-        AlertDialog dialog= builder.create();
-        dialog.show();
-    }
 }

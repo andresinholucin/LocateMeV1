@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
+import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.configuracion.MetodosGenerales;
 import ec.edu.upse.locatemev1.modelo.Usuario;
@@ -27,6 +28,7 @@ public class RegistrarDatosTutor extends AppCompatActivity {
     Boolean var_repetido;
     Usuario usuario = new Usuario();
     EditText txtNombres, txtApellidos, txtCedula;
+    ParametrosConexion con =new ParametrosConexion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,9 @@ public class RegistrarDatosTutor extends AppCompatActivity {
         protected List<String> doInBackground(Void... voids) {
             try
             {
-                String url = "http://192.168.101.12:8080/WebServiceAlertasSpring/api/usuario/validarCedulaRepetida/"+strCedula;
+                //String url = "http://192.168.101.12:8080/WebServiceAlertasSpring/api/usuario/validarCedulaRepetida/"+strCedula;
+                String parametro= "validacedula/"+txtCedula.getText().toString()+"/";
+                final String url=con.urlcompeta("usuariotutoreado",parametro);
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 ResponseEntity<Boolean> response= restTemplate.getForEntity(url,Boolean.class);
@@ -86,6 +90,14 @@ public class RegistrarDatosTutor extends AppCompatActivity {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(List<String> strings) {
+            super.onPostExecute(strings);
+
+            if (VariablesGenerales.getIntBandera().equals(1)){
+                txtCedula.setError("Este Usuario ya fue Registrado");
+            }
+        }
     }
 
     public void siguiente(View view){
