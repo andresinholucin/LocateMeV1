@@ -117,7 +117,7 @@ public class nombreapellido extends AppCompatActivity {
     public boolean validaciones(){
         String nombre= txtNombre.getText().toString();
         String apellido= txtApellido.getText().toString();
-        if (nombre.isEmpty()){
+        if (nombre.isEmpty() ||nombre.equals("") ){
             txtNombre.setError("Ingrese Nombre");
             return false;
 

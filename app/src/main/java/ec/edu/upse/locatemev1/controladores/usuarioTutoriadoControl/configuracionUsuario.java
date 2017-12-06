@@ -37,7 +37,7 @@ public class configuracionUsuario extends AppCompatActivity {
     CheckBox chk_sms;
 
     Button btn_aceptar;
-    Button bitton2;
+
 
     Spinner sp_tiemposensado;
     Spinner sp_perimetro;
@@ -55,6 +55,7 @@ public class configuracionUsuario extends AppCompatActivity {
 
     Usuario usuario;
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
+    String mensaje="";
 
     String accion;
     AlertDialog alert = null;
@@ -102,13 +103,6 @@ public class configuracionUsuario extends AppCompatActivity {
         validacionesIniciales();
         //Toast.makeText(this,"usuario "+ usuario,Toast.LENGTH_LONG).show();
         //Toast.makeText(this, accion,Toast.LENGTH_LONG).show();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Importante");
-        builder.setMessage("Este es un programa solo de prueba y no la versión completa");
-        builder.setPositiveButton("OK",null);
-        builder.create();
-        builder.show();
     }
 
     public void anadirElementos(){
@@ -116,10 +110,11 @@ public class configuracionUsuario extends AppCompatActivity {
         sp_tiemposensado=(Spinner)findViewById(R.id.sp_tiempoSensado);
         chk_sms=(CheckBox)findViewById(R.id.chk_sms);
         btn_aceptar=(Button)findViewById(R.id.btn_aceptar);
-        bitton2=(Button)findViewById(R.id.button2);
+
 
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
         usuario=getIntent().getParcelableExtra("usuario");
+        Toast.makeText(this,usuario.getIdusuario().toString(),Toast.LENGTH_SHORT).show();
         accion=getIntent().getStringExtra("accion");
         tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
     }
@@ -155,13 +150,14 @@ public class configuracionUsuario extends AppCompatActivity {
         }
 
         if(accion==null){
+            //esta seccion de codigo se ejecuta cuando se guardara un usuario por primera vez
             //Toast.makeText(this, "accion nulo", Toast.LENGTH_SHORT).show();
             btn_aceptar.setText("Aceptar");
 
         }else if(accion.equals("menuconfigurar")){
-            btn_aceptar.setText("Editar");
-
+            //esta seccion se ejecutara cuando se edite la configuracion de un usuario
             //este codigo se ejecuta cuando de la lista de tutoreados nos movemos a la configuracion del tutoreado
+            btn_aceptar.setText("Editar");
             Toast.makeText(this, " estas listo", Toast.LENGTH_SHORT).show();
             //desactivar combos
             sp_tiemposensado.setEnabled(false);
@@ -183,6 +179,7 @@ public class configuracionUsuario extends AppCompatActivity {
 
             if(accion==null){
                 //guardar un usuario nuevo
+                mensaje="Usuario Tutoreado Creado";
                 usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
                 usuario.setPerimetroSensado(perimetroSeleccionado);
                 usuario.setTiempoSensado(tiempoSensadoSeleccionado);
@@ -196,6 +193,16 @@ public class configuracionUsuario extends AppCompatActivity {
                 sp_perimetro.setEnabled(true);
                 chk_sms.setEnabled(true);
                 btn_aceptar.setText("Actualizar");
+
+            }else if(btn_aceptar.getText().equals("Actualizar")){
+                Toast.makeText(this,"Actualizar informacion",Toast.LENGTH_SHORT).show();
+                //guardar un usuario nuevo
+                //usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
+                mensaje="Usuario Tutoreado Actualizado";
+                usuario.setPerimetroSensado(perimetroSeleccionado);
+                usuario.setTiempoSensado(tiempoSensadoSeleccionado);
+                new HttpEnviaPostUsuario().execute();
+                //System.out.println(usuario);
 
             }
 
@@ -327,7 +334,7 @@ public class configuracionUsuario extends AppCompatActivity {
             super.onPostExecute(usuario);
             if(usu!=null){
                 builder.setTitle("Confirmacion!");
-                builder.setMessage("Usuario Tutoreado Creado");
+                builder.setMessage(mensaje);
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -355,5 +362,12 @@ public class configuracionUsuario extends AppCompatActivity {
 
     }
 
+    private class HttpModificaConfiguracionUsuario extends  AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            return null;
+        }
+    }
 
 }

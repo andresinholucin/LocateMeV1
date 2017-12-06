@@ -20,7 +20,7 @@ public class usuariocontrasenia extends AppCompatActivity {
     Usuario usuario;
     TipoDiscapacidad tipoDiscapacidadSeleccionada;
 
-    String nombre;
+    String accion;
     String apellido;
     Integer discapacidad;
 
@@ -29,6 +29,7 @@ public class usuariocontrasenia extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuariocontrasenia);
         anadirElementos();
+        validacionesIniciales();
     }
 
     public void anadirElementos(){
@@ -37,6 +38,8 @@ public class usuariocontrasenia extends AppCompatActivity {
         txtContraseña =(EditText)findViewById(R.id.txt_pass);
         txtRepiteContraseña =(EditText)findViewById(R.id.txt_passRepetir);
         usuario=getIntent().getParcelableExtra("usuario");
+        accion=getIntent().getStringExtra("accion");
+        //Toast.makeText(this,accion,Toast.LENGTH_SHORT).show();
         tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
     }
 
@@ -49,6 +52,12 @@ public class usuariocontrasenia extends AppCompatActivity {
             intent.putExtra("usuario", usuario);
             intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
             startActivity(intent);
+        }
+    }
+
+    public void validacionesIniciales(){
+        if(accion.equals("perfil")){
+
         }
     }
 

@@ -102,12 +102,12 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            style="@style/buttonStyle"
             android:id="@+id/btn_editar1"
-            android:text="@string/btn_editar"
-            android:onClick="editarPerfilTutor"
+            style="@style/buttonStyle"
             android:layout_marginTop="40dip"
-            android:enabled="false"/>
+            android:enabled="true"
+            android:onClick="editarDatosGeneralesTutoreado"
+            android:text="@string/btn_editar" />
 
         <TextView
             style="@style/TextViewtStyle"
@@ -145,13 +145,13 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/btn_editarDatosAcceso"
             style="@style/buttonStyle"
-            android:id="@+id/btn_editar2"
-            android:text="@string/btn_editar"
-            android:onClick="editarPerfilUsuario"
             android:layout_marginTop="40dip"
-            android:enabled="false"
-            />
+            android:editable="false"
+            android:enabled="true"
+            android:onClick="editarDatosAccesoTutoreado"
+            android:text="@string/btn_editar" />
 
     </LinearLayout>
 </ScrollView>

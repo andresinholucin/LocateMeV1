@@ -133,16 +133,6 @@
             android:onClick="aceptar"
             android:layout_marginTop="40dip"/>
 
-        <Button
-            android:id="@+id/button2"
-            style="@style/buttonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
-            android:layout_weight="1"
-            android:onClick="aceptar2"
-            android:text="@string/btn_aceptar" />
-
 
     </LinearLayout>
 </ScrollView>
