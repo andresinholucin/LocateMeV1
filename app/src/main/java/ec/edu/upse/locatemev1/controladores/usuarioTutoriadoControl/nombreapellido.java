@@ -33,15 +33,15 @@ public class nombreapellido extends AppCompatActivity {
     EditText txtNombre;
     EditText txtApellido;
 
-
-
-    Usuario usuario= new Usuario();
+    Usuario usuarioSeleccionado;
     VariablesGenerales variablesGenerales;
     List<TipoDiscapacidad> listaTipoDiscapacidad;
     List<String> str_Lista=new ArrayList<String>();
     ParametrosConexion con =new ParametrosConexion();
     ArrayAdapter<String> adaptador;
     TipoDiscapacidad tipoDiscapacidadSeleccionada= new TipoDiscapacidad();
+
+    String accion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,11 @@ public class nombreapellido extends AppCompatActivity {
         sp_listadiscapacidad=(Spinner)findViewById(R.id.sp_discapacidades);
         txtNombre=(EditText)findViewById(R.id.txt_nombresUsuario);
         txtApellido=(EditText)findViewById(R.id.txt_apellidosUsuario);
+
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
+
+        usuarioSeleccionado=getIntent().getParcelableExtra("usuario");
+        accion=getIntent().getStringExtra("accion");
     }
 
     public void validacionesIniciales() {
@@ -99,18 +103,55 @@ public class nombreapellido extends AppCompatActivity {
                     toast1.show();
                 }
 
+                if(accion==null){
+                    Toast.makeText(this,"llegaste desde crear usuario",Toast.LENGTH_SHORT).show();
+                }else if(accion.equals("perfil")){
+                    Toast.makeText(this,"llegaste de perfil",Toast.LENGTH_SHORT).show();
+                    btnsiguiente.setText("EDITAR");
+                    txtNombre.setText(usuarioSeleccionado.getUsuUNombres());
+                    txtApellido.setText(usuarioSeleccionado.getUsuUApellidos());
+                    txtApellido.setEnabled(false);
+                    txtNombre.setEnabled(false);
+                    sp_listadiscapacidad.setEnabled(false);
+                }
+
     }
 
     public  void btn_siguiente(View view){
         if (validaciones()){
-            Usuario usuario= new Usuario();
-            usuario.setUsuUNombres(txtNombre.getText().toString());
-            usuario.setUsuUApellidos(txtApellido.getText().toString());
 
-            Intent intent = new Intent(this, usuariocontrasenia.class);
-            intent.putExtra("usuario", usuario);
-            intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
-            startActivity(intent);
+            if(accion==null){
+                //Toast.makeText(this,"llegaste desde crear usuario",Toast.LENGTH_SHORT).show();
+                Usuario usuario= new Usuario();
+                usuario.setUsuUNombres(txtNombre.getText().toString());
+                usuario.setUsuUApellidos(txtApellido.getText().toString());
+
+                Intent intent = new Intent(this, usuariocontrasenia.class);
+                intent.putExtra("usuario", usuario);
+                intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
+                startActivity(intent);
+
+            }else if(btnsiguiente.getText().equals("SIGUIENTE")){
+                //Toast.makeText(this,"llegaste de perfil",Toast.LENGTH_SHORT).show();
+
+                usuarioSeleccionado.setUsuUNombres(txtNombre.getText().toString());
+                usuarioSeleccionado.setUsuUApellidos(txtApellido.getText().toString());
+
+                Intent intent = new Intent(this, datospersonales1.class);
+                intent.putExtra("usuario", usuarioSeleccionado);
+                intent.putExtra("accion","perfil");
+                //intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
+                startActivity(intent);
+
+            }else if(btnsiguiente.getText().equals("EDITAR")){
+                txtApellido.setEnabled(true);
+                txtNombre.setEnabled(true);
+                sp_listadiscapacidad.setEnabled(true);
+                btnsiguiente.setText("SIGUIENTE");
+            }
+
+
+
         }
     }
 

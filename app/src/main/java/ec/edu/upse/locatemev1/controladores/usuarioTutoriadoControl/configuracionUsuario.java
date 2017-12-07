@@ -209,31 +209,6 @@ public class configuracionUsuario extends AppCompatActivity {
 
     }
 
-    public void aceptar2(View view){
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setMessage("Usuario Tutoreado Creado");
-        builder.setTitle("Confirmacion");
-
-        builder.setPositiveButton("si", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                startActivity(intent);
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                startActivity(intent);
-            }
-        });
-
-        AlertDialog dialog= builder.create();
-        dialog.show();
-
-    }
 
     public boolean validaciones(){
         return true;
@@ -362,12 +337,5 @@ public class configuracionUsuario extends AppCompatActivity {
 
     }
 
-    private class HttpModificaConfiguracionUsuario extends  AsyncTask<Void,Void,Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            return null;
-        }
-    }
 
 }
