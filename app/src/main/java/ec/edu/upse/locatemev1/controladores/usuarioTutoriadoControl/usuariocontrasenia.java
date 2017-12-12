@@ -27,11 +27,8 @@ public class usuariocontrasenia extends AppCompatActivity {
     EditText txtContraseña;
     EditText txtRepiteContraseña;
     Usuario usuario;
-    TipoDiscapacidad tipoDiscapacidadSeleccionada;
 
     String accion;
-
-    MetodosGenerales metodosGenerales= new MetodosGenerales();
 
     ParametrosConexion con =new ParametrosConexion();
     @Override
@@ -54,8 +51,7 @@ public class usuariocontrasenia extends AppCompatActivity {
         txtRepiteContraseña =(EditText)findViewById(R.id.txt_passRepetir);
         usuario=getIntent().getParcelableExtra("usuario");
         accion=getIntent().getStringExtra("accion");
-        //Toast.makeText(this,accion,Toast.LENGTH_SHORT).show();
-        tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
+
     }
 
     public void btn_siguiente(View v){
@@ -67,7 +63,6 @@ public class usuariocontrasenia extends AppCompatActivity {
 
                 Intent intent=new Intent(usuariocontrasenia.this, datospersonales1.class);
                 intent.putExtra("usuario", usuario);
-                intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
                 startActivity(intent);
             }
             else{
@@ -75,7 +70,6 @@ public class usuariocontrasenia extends AppCompatActivity {
                 String clave=MetodosGenerales.cryptMD5(txtContraseña.getText().toString());
                 usuario.setUsuUClave(clave);
                 new HttpEnviaPostUsuario().execute();
-
             }
         }
     }
@@ -88,14 +82,10 @@ public class usuariocontrasenia extends AppCompatActivity {
             btnsiguiente.setText("Actualizar Datos");
             txtUsuario.setText(usuario.getUsuUUsuario());
 
-            String contra=usuario.getUsuUClave();
-            //String clave=MetodosGenerales.cryptMD5(contra);
-            txtContraseña.setText(contra);
-
-
+            //String contra=usuario.getUsuUClave();
+            //txtContraseña.setText(contra);
         }
     }
-
 
     public Boolean validaciones(){
 
@@ -120,7 +110,6 @@ public class usuariocontrasenia extends AppCompatActivity {
             return true;
         }
     }
-
 
     private class HttpEnviaPostUsuario extends AsyncTask<Void, Void, Usuario > {
         AlertDialog.Builder builder;

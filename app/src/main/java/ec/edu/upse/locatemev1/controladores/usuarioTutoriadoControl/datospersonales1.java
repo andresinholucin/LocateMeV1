@@ -33,16 +33,12 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class datospersonales1 extends AppCompatActivity {
 
-    Button buttonfecha;
-
     private int dia,mes,anio;
     EditText txtFecha;
     EditText txtCedula;
     Button btnsiguiente;
     Usuario usuario;
-    TipoDiscapacidad tipoDiscapacidadSeleccionada;
     ParametrosConexion con =new ParametrosConexion();
-    String errorCedula;
     MetodosGenerales metodosGenerales=new MetodosGenerales();
     Boolean ced=false;
     String accion;
@@ -53,52 +49,47 @@ public class datospersonales1 extends AppCompatActivity {
         setContentView(R.layout.activity_datospersonales1);
         anadirElementos();
 
+        /*
         txtCedula.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
-                    System.out.println("perdiste el foco");
+                    //System.out.println("perdiste el foco");
                     if (accion==null){
                         validaCedula();
                     }
-
                 }
             }
-        });
+        });*/
 
         calendario();
         validacionesIniciales();
     }
 
+    public void anadirElementos(){
+        txtFecha =(EditText)findViewById(R.id.txt_fechaNacimiento);
+        txtCedula =(EditText)findViewById(R.id.txt_cedula);
+        btnsiguiente=(Button)findViewById(R.id.btn_siguiente);
+        usuario=getIntent().getParcelableExtra("usuario");
+        accion=getIntent().getStringExtra("accion");
+
+    }
+
     private void validacionesIniciales() {
         if (accion==null){
-
+            btnsiguiente.setText("SIGUIENTE");
         }else if(accion.equals("perfil")){
-            btnsiguiente.setText("Actualizar Datos");
+            btnsiguiente.setText("ACTUALIZAR DATOS");
             txtCedula.setText(usuario.getUsuUCedula());
             String fecha=usuario.getUsuUDia()+" / "+usuario.getUsuUMes()+" / "+usuario.getUsuUAnio();
             txtFecha.setText(fecha);
         }
-
-    }
-
-
-    public void anadirElementos(){
-        txtFecha =(EditText)findViewById(R.id.txt_fechaNacimiento);
-        txtCedula =(EditText)findViewById(R.id.txt_cedula);
-        //txt_telefono=(EditText)findViewById(R.id.editTexttelefono);
-        btnsiguiente=(Button)findViewById(R.id.btn_siguiente);
-        usuario=getIntent().getParcelableExtra("usuario");
-        accion=getIntent().getStringExtra("accion");
-        tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
-
     }
 
     public void calendario(){//metodo para obtener los datos de la fecha en la clase actual al dar clic
         txtFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new HttpValidacionCedula().execute();
                 llamaCalendario();
             }
         });
@@ -133,46 +124,27 @@ public class datospersonales1 extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), dia +" "+mes+" "+ anio, Toast.LENGTH_SHORT).show();
     }
 
-    public void validaCedula(){
-        String cedula= txtCedula.getText().toString();
-        if (cedula.isEmpty()){
-            txtCedula.setError("Ingrese Cedula");
-        }else if(!metodosGenerales.validadorDeCedula(cedula)){
-            txtCedula.setError("Cedula Incorrecto");
-        }
-        new HttpValidacionCedula().execute();
-    }
-
     public void btn_siguiente(View view){
-
-
-            if(btnsiguiente.getText()=="SIGUIENTE"){
+            if(accion==null){
                 if (validaciones()){
                     usuario.setUsuUCedula(txtCedula.getText().toString());
-                    //usuario.setUsuUTelefono(txt_telefono.getText().toString());
                     usuario.setUsuUAnio(String.valueOf(anio));
                     usuario.setUsuUMes(String.valueOf(mes));
                     usuario.setUsuUDia(String.valueOf(dia));
-
-                    Intent intent=new Intent(datospersonales1.this, configuracionUsuario.class);
-                    intent.putExtra("usuario", usuario);
-                    intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
-                    startActivity(intent);
+                    new HttpValidacionCedula().execute();
                 }
+            }else if(accion.equals("perfil")){
+                if(validaciones()){
+                    //validar desde que viene de perfil la cedula que no exista si es q se modifico
+                    //validar que no esten en blancos dia mes y año
 
-
-            }else if(btnsiguiente.getText()=="ACTUALIZAR DATOS"){
-                usuario.setUsuUCedula(txtCedula.getText().toString());
-                //usuario.setUsuUTelefono(txt_telefono.getText().toString());
-                usuario.setUsuUAnio(String.valueOf(anio));
-                usuario.setUsuUMes(String.valueOf(mes));
-                usuario.setUsuUDia(String.valueOf(dia));
-                new HttpEnviaPostUsuario().execute();
-
+                    usuario.setUsuUCedula(txtCedula.getText().toString());
+                    usuario.setUsuUAnio(usuario.getUsuUAnio());
+                    usuario.setUsuUMes(usuario.getUsuUMes());
+                    usuario.setUsuUDia(usuario.getUsuUDia());
+                    new HttpEnviaPostUsuario().execute();
+                }
             }
-
-
-
     }
 
     public Boolean validaciones(){
@@ -189,24 +161,17 @@ public class datospersonales1 extends AppCompatActivity {
             txtCedula.setError("Cedula Incorrecto");
             return false;
         }
-
-        if(ced){
-            txtCedula.setError("Este Usuario ya fue Registrado");
-            return false;
-        }
-
         return true;
     }
 
-
-    private class HttpValidacionCedula extends AsyncTask<Void, Void, Void > {
+    private class HttpValidacionCedula extends AsyncTask<Void, Void, Boolean > {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             try {
                 String parametro,id;
                 id=txtCedula.getText().toString();
@@ -216,27 +181,28 @@ public class datospersonales1 extends AppCompatActivity {
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                     ResponseEntity<Boolean> response= restTemplate.getForEntity(url, Boolean.class);
-                    //listaTiempoSensado = Arrays.asList(response.getBody());
-                    //System.out.println(response);
                     ced=response.getBody();
-                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+ced);
-                }else{
-                    ced=false;
-                }
-
+                    return ced;
+                }else
+                    return false;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
                 return null;
             }
-            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
             if(ced){
                 txtCedula.setError("Este Usuario ya fue Registrado");
+            }else{
+                Intent intent=new Intent(datospersonales1.this, configuracionUsuario.class);
+                intent.putExtra("usuario", usuario);
+                //intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
+                startActivity(intent);
             }
+
         }
     }
 
@@ -295,9 +261,19 @@ public class datospersonales1 extends AppCompatActivity {
 
                 builder.show();
             }
-
+            finish();
         }
 
     }
 
+    /*
+    public void validaCedula(){
+        String cedula= txtCedula.getText().toString();
+        if (cedula.isEmpty()){
+            txtCedula.setError("Ingrese Cedula");
+        }else if(!metodosGenerales.validadorDeCedula(cedula)){
+            txtCedula.setError("Cedula Incorrecto");
+        }
+        new HttpValidacionCedula().execute();
+    }*/
 }

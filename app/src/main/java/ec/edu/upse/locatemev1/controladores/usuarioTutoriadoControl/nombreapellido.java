@@ -99,23 +99,45 @@ public class nombreapellido extends AppCompatActivity {
                     adaptador = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1,str_Lista);
                     sp_listadiscapacidad.setAdapter(adaptador);
                     adaptador.notifyDataSetChanged();
-                    Toast toast1 = Toast.makeText(getApplicationContext(),"llenaste lista por defecto", Toast.LENGTH_LONG);
-                    toast1.show();
+                    //Toast toast1 = Toast.makeText(getApplicationContext(),"llenaste lista por defecto", Toast.LENGTH_LONG);
+                    //toast1.show();
                 }
 
                 if(accion==null){
                     Toast.makeText(this,"llegaste desde crear usuario",Toast.LENGTH_SHORT).show();
                 }else if(accion.equals("perfil")){
+
                     Toast.makeText(this,"llegaste de perfil",Toast.LENGTH_SHORT).show();
-                    btnsiguiente.setText("EDITAR");
+                    //btnsiguiente.setText("SIGUIENTE");
                     txtNombre.setText(usuarioSeleccionado.getUsuUNombres());
                     txtApellido.setText(usuarioSeleccionado.getUsuUApellidos());
+
+                    String inicializarItem = usuarioSeleccionado.getTipoDiscapacidad().getUsuTipoDescripcion().toString();
+                    sp_listadiscapacidad.setSelection(obtenerPosicionItem(sp_listadiscapacidad,inicializarItem));
+                    /*
                     txtApellido.setEnabled(false);
                     txtNombre.setEnabled(false);
-                    sp_listadiscapacidad.setEnabled(false);
+                    sp_listadiscapacidad.setEnabled(false);*/
                 }
 
     }
+
+    public static int obtenerPosicionItem(Spinner spinner, String tipo) {
+        //Creamos la variable posicion y lo inicializamos en 0
+        int posicion = 0;
+        //Recorre el spinner en busca del ítem que coincida con el parametro
+        //que lo pasaremos posteriormente
+        for (int i = 0; i < spinner.getCount(); i++) {
+            //Almacena la posición del ítem que coincida con la búsqueda
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(tipo)) {
+                posicion = i;
+            }
+        }
+        //Devuelve un valor entero (si encontro una coincidencia devuelve la
+        // posición 0 o N, de lo contrario devuelve 0 = posición inicial)
+        return posicion;
+    }
+
 
     public  void btn_siguiente(View view){
         if (validaciones()){
@@ -125,29 +147,23 @@ public class nombreapellido extends AppCompatActivity {
                 Usuario usuario= new Usuario();
                 usuario.setUsuUNombres(txtNombre.getText().toString());
                 usuario.setUsuUApellidos(txtApellido.getText().toString());
+                usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
 
                 Intent intent = new Intent(this, usuariocontrasenia.class);
                 intent.putExtra("usuario", usuario);
-                intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
+                //intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
                 startActivity(intent);
 
-            }else if(btnsiguiente.getText().equals("SIGUIENTE")){
+            }else if(accion.equals("perfil")){
                 //Toast.makeText(this,"llegaste de perfil",Toast.LENGTH_SHORT).show();
-
                 usuarioSeleccionado.setUsuUNombres(txtNombre.getText().toString());
                 usuarioSeleccionado.setUsuUApellidos(txtApellido.getText().toString());
+                usuarioSeleccionado.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
 
                 Intent intent = new Intent(this, datospersonales1.class);
                 intent.putExtra("usuario", usuarioSeleccionado);
                 intent.putExtra("accion","perfil");
-                //intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
                 startActivity(intent);
-
-            }else if(btnsiguiente.getText().equals("EDITAR")){
-                txtApellido.setEnabled(true);
-                txtNombre.setEnabled(true);
-                sp_listadiscapacidad.setEnabled(true);
-                btnsiguiente.setText("SIGUIENTE");
             }
 
 
@@ -201,6 +217,10 @@ public class nombreapellido extends AppCompatActivity {
             adaptador = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1,str_Lista);
             sp_listadiscapacidad.setAdapter(adaptador);
             adaptador.notifyDataSetChanged();
+            if(accion==("perfil")){
+                String inicializarItem = usuarioSeleccionado.getTipoDiscapacidad().getUsuTipoDescripcion().toString();
+                sp_listadiscapacidad.setSelection(obtenerPosicionItem(sp_listadiscapacidad,inicializarItem));
+            }
         }
     }
 

@@ -35,9 +35,7 @@ import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class configuracionUsuario extends AppCompatActivity {
     CheckBox chk_sms;
-
     Button btn_aceptar;
-
 
     Spinner sp_tiemposensado;
     Spinner sp_perimetro;
@@ -52,9 +50,8 @@ public class configuracionUsuario extends AppCompatActivity {
     List<String> str_ListaPerimetro=new ArrayList<String>();
     Perimetro perimetroSeleccionado;
     TiempoSensado tiempoSensadoSeleccionado;
-
     Usuario usuario;
-    TipoDiscapacidad tipoDiscapacidadSeleccionada;
+    //TipoDiscapacidad tipoDiscapacidadSeleccionada;
     String mensaje="";
 
     String accion;
@@ -111,12 +108,10 @@ public class configuracionUsuario extends AppCompatActivity {
         chk_sms=(CheckBox)findViewById(R.id.chk_sms);
         btn_aceptar=(Button)findViewById(R.id.btn_aceptar);
 
-
         variablesGenerales = ((VariablesGenerales)getApplicationContext());
         usuario=getIntent().getParcelableExtra("usuario");
-        Toast.makeText(this,usuario.getIdusuario().toString(),Toast.LENGTH_SHORT).show();
         accion=getIntent().getStringExtra("accion");
-        tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
+        //tipoDiscapacidadSeleccionada=getIntent().getParcelableExtra("tipoDiscapacidad");
     }
 
     public void validacionesIniciales(){
@@ -158,21 +153,43 @@ public class configuracionUsuario extends AppCompatActivity {
             //esta seccion se ejecutara cuando se edite la configuracion de un usuario
             //este codigo se ejecuta cuando de la lista de tutoreados nos movemos a la configuracion del tutoreado
             btn_aceptar.setText("Editar");
-            Toast.makeText(this, " estas listo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "estas listo", Toast.LENGTH_SHORT).show();
             //desactivar combos
             sp_tiemposensado.setEnabled(false);
             sp_perimetro.setEnabled(false);
             chk_sms.setEnabled(false);
 
             //llenar con predeterminados
-            int a= usuario.getTiempoSensado().getUsuTiempoDescripcion();
-            String b=usuario.getPerimetroSensado().getUsuPerimetroDescripcion();
+            String inicializarItemtiempo = String.valueOf(usuario.getTiempoSensado().getUsuTiempoDescripcion());
+            sp_tiemposensado.setSelection(obtenerPosicionItem(sp_tiemposensado,inicializarItemtiempo));
 
-            
-            System.out.println(sp_tiemposensado);
-            System.out.println(a+" y "+b);
+            String inicializarItemperimetro = usuario.getPerimetroSensado().getUsuPerimetroDescripcion();
+            sp_perimetro.setSelection(obtenerPosicionItem(sp_perimetro,inicializarItemperimetro));
+
+            if(usuario.getUsuUSms().equals("A")){
+                chk_sms.setChecked(true);
+            }else{
+                chk_sms.setChecked(false);
+            }
+
         }
 
+    }
+
+    public static int obtenerPosicionItem(Spinner spinner, String str) {
+        //Creamos la variable posicion y lo inicializamos en 0
+        int posicion = 0;
+        //Recorre el spinner en busca del ítem que coincida con el parametro
+        //que lo pasaremos posteriormente
+        for (int i = 0; i < spinner.getCount(); i++) {
+            //Almacena la posición del ítem que coincida con la búsqueda
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(str)) {
+                posicion = i;
+            }
+        }
+        //Devuelve un valor entero (si encontro una coincidencia devuelve la
+        // posición 0 o N, de lo contrario devuelve 0 = posición inicial)
+        return posicion;
     }
 
     public void aceptar(View view){
@@ -180,10 +197,13 @@ public class configuracionUsuario extends AppCompatActivity {
             if(accion==null){
                 //guardar un usuario nuevo
                 mensaje="Usuario Tutoreado Creado";
-                usuario.setTipoDiscapacidad(tipoDiscapacidadSeleccionada);
                 usuario.setPerimetroSensado(perimetroSeleccionado);
-                usuario.setTiempoSensado(tiempoSensadoSeleccionado);
-                //System.out.println(usuario);
+                usuario.setTiempoSensado(tiempoSensadoSeleccionado);//System.out.println(usuario);
+                if(chk_sms.isChecked()){
+                    usuario.setUsuUSms("A");
+                }else{
+                    usuario.setUsuUSms("X");
+                }
                 new HttpEnviaPostUsuario().execute();
 
             }else if(btn_aceptar.getText().equals("Editar")){
@@ -201,14 +221,17 @@ public class configuracionUsuario extends AppCompatActivity {
                 mensaje="Usuario Tutoreado Actualizado";
                 usuario.setPerimetroSensado(perimetroSeleccionado);
                 usuario.setTiempoSensado(tiempoSensadoSeleccionado);
+
+                if(chk_sms.isChecked()){
+                    usuario.setUsuUSms("A");
+                }else{
+                    usuario.setUsuUSms("X");
+                }
+
                 new HttpEnviaPostUsuario().execute();
                 //System.out.println(usuario);
-
             }
-
-
     }
-
 
     public boolean validaciones(){
         return true;
@@ -245,6 +268,10 @@ public class configuracionUsuario extends AppCompatActivity {
             adaptador = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1,str_ListaTiempoSensado);
             sp_tiemposensado.setAdapter(adaptador);
             adaptador.notifyDataSetChanged();
+            if(accion==("menuconfigurar")){
+                String inicializarItemtiempo = String.valueOf(usuario.getTiempoSensado().getUsuTiempoDescripcion());
+                sp_tiemposensado.setSelection(obtenerPosicionItem(sp_tiemposensado,inicializarItemtiempo));
+            }
         }
     }
 
@@ -274,6 +301,10 @@ public class configuracionUsuario extends AppCompatActivity {
             adaptador = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1,str_ListaPerimetro);
             sp_perimetro.setAdapter(adaptador);
             adaptador.notifyDataSetChanged();
+            if(accion==("menuconfigurar")){
+                String inicializarItemperimetro = usuario.getPerimetroSensado().getUsuPerimetroDescripcion();
+                sp_perimetro.setSelection(obtenerPosicionItem(sp_perimetro,inicializarItemperimetro));
+            }
         }
     }
 
@@ -336,6 +367,5 @@ public class configuracionUsuario extends AppCompatActivity {
         }
 
     }
-
 
 }
