@@ -32,6 +32,7 @@ import ec.edu.upse.locatemev1.modelo.Perimetro;
 import ec.edu.upse.locatemev1.modelo.TiempoSensado;
 import ec.edu.upse.locatemev1.modelo.TipoDiscapacidad;
 import ec.edu.upse.locatemev1.modelo.Usuario;
+import ec.edu.upse.locatemev1.modelo.UsuarioAsignado;
 
 public class configuracionUsuario extends AppCompatActivity {
     CheckBox chk_sms;
@@ -51,6 +52,7 @@ public class configuracionUsuario extends AppCompatActivity {
     Perimetro perimetroSeleccionado;
     TiempoSensado tiempoSensadoSeleccionado;
     Usuario usuario;
+    UsuarioAsignado ua=new UsuarioAsignado();
     //TipoDiscapacidad tipoDiscapacidadSeleccionada;
     String mensaje="";
 
@@ -204,7 +206,11 @@ public class configuracionUsuario extends AppCompatActivity {
                 }else{
                     usuario.setUsuUSms("X");
                 }
-                new HttpEnviaPostUsuario().execute();
+                //new HttpEnviaPostUsuario().execute();
+                ua.setEstado("A");
+                ua.setUsuario1(VariablesGenerales.getUsuarioTutor());
+                ua.setUsuario2(usuario);
+                new HttpEnviaPostUsuarioAsignado().execute();
 
             }else if(btn_aceptar.getText().equals("Editar")){
                 //Habilita la edicion de los controles
@@ -233,10 +239,7 @@ public class configuracionUsuario extends AppCompatActivity {
             }
     }
 
-    public boolean validaciones(){
-        return true;
-    }
-
+    //llama web service y devuelve la lista de tiempos para llenar en el spinner
     private class HttpListaTiempoSensado extends AsyncTask<Void, Void, Void > {
         @Override
         protected void onPreExecute() {
@@ -275,6 +278,7 @@ public class configuracionUsuario extends AppCompatActivity {
         }
     }
 
+    //llama web service y devuelve la lista de Perimetros para llenar en el spinner
     private class HttpListaPerimetros extends AsyncTask<Void, Void, Void > {
         @Override
         protected Void doInBackground(Void... params) {
@@ -308,6 +312,7 @@ public class configuracionUsuario extends AppCompatActivity {
         }
     }
 
+    //envia al web service el usuario
     private class HttpEnviaPostUsuario extends AsyncTask<Void, Void, Usuario > {
         AlertDialog.Builder builder;
         @Override
@@ -366,6 +371,66 @@ public class configuracionUsuario extends AppCompatActivity {
 
         }
 
+    }
+
+    /*envia al web service para guardar un usuario Asignado, se guarda en la tabla usuario asignado y
+    en la tabla usuario*/
+    private class HttpEnviaPostUsuarioAsignado extends AsyncTask<Void,Void,UsuarioAsignado>{
+        AlertDialog.Builder builder;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder = new AlertDialog.Builder(configuracionUsuario.this);
+        }
+
+        @Override
+        protected UsuarioAsignado doInBackground(Void... params) {
+            try {
+                final String url=con.urlcompeta("usuariotutoreado","registraUsuarioAsignado/");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                final UsuarioAsignado usuasignado= restTemplate.postForObject(url,ua,UsuarioAsignado.class);
+                System.out.println(usuasignado.toString());
+
+                return usuasignado;
+                //mensajeConfirmacion(usu);
+                //return listaUsuarios;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final UsuarioAsignado usuarioAsignado) {
+            super.onPostExecute(usuarioAsignado);
+            if(usuarioAsignado!=null){
+                builder.setTitle("Confirmacion!");
+                builder.setMessage(mensaje);
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
+                        intent.putExtra("usuario", usuarioAsignado);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.show();
+            }else{
+                builder.setTitle("Confirmacion!");
+                builder.setMessage("Usuario No Pudo Ser Creado");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                builder.show();
+            }
+        }
     }
 
 }

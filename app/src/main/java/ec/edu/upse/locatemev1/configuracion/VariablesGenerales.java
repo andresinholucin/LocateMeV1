@@ -32,6 +32,8 @@ public class VariablesGenerales extends Application {
     public List<TiempoSensado> listaTiempoSensado;
     public List<Perimetro> listaPerimetro;
 
+    public static Usuario usuarioTutor;
+
     public List<Usuario> getListaUsuariosPorTutor() {
         return listaUsuariosPorTutor;
     }
@@ -63,8 +65,6 @@ public class VariablesGenerales extends Application {
     public void setListaPerimetro(List<Perimetro> listaPerimetro) {
         this.listaPerimetro = listaPerimetro;
     }
-
-
 
     public static List<EmisionAlerta> getListEmisionAlerta() {
         return listEmisionAlerta;
@@ -150,5 +150,13 @@ public class VariablesGenerales extends Application {
 
     public static void setListTutor(List<Usuario> listTutor) {
         VariablesGenerales.listTutor = listTutor;
+    }
+
+    public static Usuario getUsuarioTutor() {
+        return usuarioTutor;
+    }
+
+    public static void setUsuarioTutor(Usuario usuarioTutor) {
+        VariablesGenerales.usuarioTutor = usuarioTutor;
     }
 }

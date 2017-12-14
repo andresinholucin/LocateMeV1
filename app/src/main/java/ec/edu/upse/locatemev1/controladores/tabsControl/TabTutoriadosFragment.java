@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ec.edu.upse.locatemev1.R;
+import ec.edu.upse.locatemev1.configuracion.MetodosGenerales;
 import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.configuracionUsuario;
@@ -110,6 +112,7 @@ public class TabTutoriadosFragment extends Fragment {
             if(usuarioportutor==null){
                 Toast.makeText(getActivity(),"llenaste lista por primera vez", Toast.LENGTH_SHORT).show();
                 new HttpListaTutoreado().execute();
+                new HttpUsuarioTutor().execute();
             }else{
                 Toast.makeText(getActivity(),"llenar de variables generales", Toast.LENGTH_SHORT).show();
                 for(int i=0 ; i<usuarioportutor.size();i++)
@@ -153,6 +156,32 @@ public class TabTutoriadosFragment extends Fragment {
             adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, lst_Usuario);
             adaptador.notifyDataSetChanged();
             lista.setAdapter(adaptador);
+        }
+    }
+
+    private class HttpUsuarioTutor extends AsyncTask<Void,Void,Usuario>{
+        @Override
+        protected Usuario doInBackground(Void... params) {
+            try {
+                Usuario usuarioTutor;
+                final String url=conexion.urlcompeta("usuariotutoreado","/"+ VariablesGenerales.getLonIdTutor());
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                ResponseEntity<Usuario> response= restTemplate.getForEntity(url, Usuario.class);
+                usuarioTutor = response.getBody();
+                System.out.println(usuarioTutor);
+                return usuarioTutor;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                return null;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Usuario usuario) {
+            super.onPostExecute(usuario);
+            VariablesGenerales.setUsuarioTutor(usuario);
         }
     }
 

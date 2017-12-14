@@ -266,4 +266,5 @@ public class Usuario implements Parcelable {
             return new Usuario[size];
         }
     };
+
 }
