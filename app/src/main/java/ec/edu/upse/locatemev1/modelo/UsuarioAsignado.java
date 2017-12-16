@@ -81,4 +81,14 @@ public class UsuarioAsignado implements Parcelable {
             return new UsuarioAsignado[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "UsuarioAsignado{" +
+                "idusuarioAsignado=" + idusuarioAsignado +
+                ", estado='" + estado + '\'' +
+                ", usuario1=" + usuario1 +
+                ", usuario2=" + usuario2 +
+                '}';
+    }
 }

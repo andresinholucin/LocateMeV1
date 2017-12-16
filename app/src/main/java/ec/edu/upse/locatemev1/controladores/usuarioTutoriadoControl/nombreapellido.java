@@ -37,7 +37,7 @@ public class nombreapellido extends AppCompatActivity {
     VariablesGenerales variablesGenerales;
     List<TipoDiscapacidad> listaTipoDiscapacidad;
     List<String> str_Lista=new ArrayList<String>();
-    ParametrosConexion con =new ParametrosConexion();
+    ParametrosConexion conexion =new ParametrosConexion();
     ArrayAdapter<String> adaptador;
     TipoDiscapacidad tipoDiscapacidadSeleccionada= new TipoDiscapacidad();
 
@@ -125,10 +125,10 @@ public class nombreapellido extends AppCompatActivity {
     public static int obtenerPosicionItem(Spinner spinner, String tipo) {
         //Creamos la variable posicion y lo inicializamos en 0
         int posicion = 0;
-        //Recorre el spinner en busca del ítem que coincida con el parametro
+        //Recorre el spinner en busca del ítem que coincida conexion el parametro
         //que lo pasaremos posteriormente
         for (int i = 0; i < spinner.getCount(); i++) {
-            //Almacena la posición del ítem que coincida con la búsqueda
+            //Almacena la posición del ítem que coincida conexion la búsqueda
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(tipo)) {
                 posicion = i;
             }
@@ -185,7 +185,7 @@ public class nombreapellido extends AppCompatActivity {
     return true;
     }
 
-    //llamada al web service para llenar el combo con los tipos de discapacidades
+    //llamada al web service para llenar el combo conexion los tipos de discapacidades
     private class HttpListaTipoDiscapacidad extends AsyncTask<Void, Void, Void > {
         @Override
         protected void onPreExecute() {
@@ -195,7 +195,7 @@ public class nombreapellido extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final String url=con.urlcompeta("usuariotutoreado","tiposdiscapacidad/");
+                final String url= conexion.urlcompeta("usuariotutoreado","tiposdiscapacidad/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 ResponseEntity<TipoDiscapacidad[]> response= restTemplate.getForEntity(url, TipoDiscapacidad[].class);

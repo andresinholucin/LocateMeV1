@@ -42,7 +42,7 @@ public class datospersonales1 extends AppCompatActivity {
     MetodosGenerales metodosGenerales=new MetodosGenerales();
     Boolean ced=false;
     String accion;
-
+    String fecha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +81,7 @@ public class datospersonales1 extends AppCompatActivity {
         }else if(accion.equals("perfil")){
             btnsiguiente.setText("ACTUALIZAR DATOS");
             txtCedula.setText(usuario.getUsuUCedula());
-            String fecha=usuario.getUsuUDia()+" / "+usuario.getUsuUMes()+" / "+usuario.getUsuUAnio();
+            fecha=usuario.getUsuUDia()+" / "+usuario.getUsuUMes()+" / "+usuario.getUsuUAnio();
             txtFecha.setText(fecha);
         }
     }
@@ -135,14 +135,26 @@ public class datospersonales1 extends AppCompatActivity {
                 }
             }else if(accion.equals("perfil")){
                 if(validaciones()){
-                    //validar desde que viene de perfil la cedula que no exista si es q se modifico
-                    //validar que no esten en blancos dia mes y año
+                    try {
+                        //validar desde que viene de perfil la cedula que no exista si es q se modifico
+                        //validar que no esten en blancos dia mes y año
 
-                    usuario.setUsuUCedula(txtCedula.getText().toString());
-                    usuario.setUsuUAnio(usuario.getUsuUAnio());
-                    usuario.setUsuUMes(usuario.getUsuUMes());
-                    usuario.setUsuUDia(usuario.getUsuUDia());
-                    new HttpEnviaPostUsuario().execute();
+                        if(!fecha.toString().equals(txtFecha.getText().toString())){
+                            usuario.setUsuUAnio(String.valueOf(anio));
+                            usuario.setUsuUMes(String.valueOf(mes));
+                            usuario.setUsuUDia(String.valueOf(dia));
+                        }
+
+                        if(usuario.getUsuUCedula().toString()==(txtCedula.getText().toString()) ){
+                            new HttpEnviaPostUsuario().execute();
+                        }else{
+                            //System.out.println("laas cedulas se cambaron");
+                            usuario.setUsuUCedula(txtCedula.getText().toString());
+                            new HttpValidacionCedula().execute();
+                        }
+                    }catch (Exception e) {
+                        Log.e("MainActivity", e.getMessage(), e);
+                    }
                 }
             }
     }
@@ -194,15 +206,19 @@ public class datospersonales1 extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+
             if(ced){
                 txtCedula.setError("Este Usuario ya fue Registrado");
             }else{
-                Intent intent=new Intent(datospersonales1.this, configuracionUsuario.class);
-                intent.putExtra("usuario", usuario);
-                //intent.putExtra("tipoDiscapacidad", tipoDiscapacidadSeleccionada);
-                startActivity(intent);
+                if(accion==null){
+                    Intent intent=new Intent(datospersonales1.this, configuracionUsuario.class);
+                    intent.putExtra("usuario", usuario);
+                    startActivity(intent);
+                }else if(accion.equals("perfil")){
+                    System.out.println("llegaste hasta aqui");
+                    new HttpEnviaPostUsuario().execute();
+                }
             }
-
         }
     }
 
@@ -213,7 +229,6 @@ public class datospersonales1 extends AppCompatActivity {
             super.onPreExecute();
             builder = new AlertDialog.Builder(datospersonales1.this);
         }
-
         @Override
         protected Usuario doInBackground(Void... params) {
             try {
@@ -223,7 +238,6 @@ public class datospersonales1 extends AppCompatActivity {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 final Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
                 System.out.println(usu.toString());
-
                 return usu;
                 //mensajeConfirmacion(usu);
                 //return listaUsuarios;
@@ -261,19 +275,8 @@ public class datospersonales1 extends AppCompatActivity {
 
                 builder.show();
             }
-            finish();
         }
 
     }
 
-    /*
-    public void validaCedula(){
-        String cedula= txtCedula.getText().toString();
-        if (cedula.isEmpty()){
-            txtCedula.setError("Ingrese Cedula");
-        }else if(!metodosGenerales.validadorDeCedula(cedula)){
-            txtCedula.setError("Cedula Incorrecto");
-        }
-        new HttpValidacionCedula().execute();
-    }*/
 }

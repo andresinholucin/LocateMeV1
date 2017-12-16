@@ -32,6 +32,9 @@ import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.configuracionUsuario;
 import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.nombreapellido;
 import ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl.perfilUsuarioTutoreado;
+import ec.edu.upse.locatemev1.modelo.Perimetro;
+import ec.edu.upse.locatemev1.modelo.TiempoSensado;
+import ec.edu.upse.locatemev1.modelo.TipoDiscapacidad;
 import ec.edu.upse.locatemev1.modelo.Usuario;
 
 public class TabTutoriadosFragment extends Fragment {
@@ -113,6 +116,9 @@ public class TabTutoriadosFragment extends Fragment {
                 Toast.makeText(getActivity(),"llenaste lista por primera vez", Toast.LENGTH_SHORT).show();
                 new HttpListaTutoreado().execute();
                 new HttpUsuarioTutor().execute();
+                new HttpListaTipoDiscapacidad().execute();
+                new HttpListaTiempos().execute();
+                new HttpListaPerimetros().execute();
             }else{
                 Toast.makeText(getActivity(),"llenar de variables generales", Toast.LENGTH_SHORT).show();
                 for(int i=0 ; i<usuarioportutor.size();i++)
@@ -182,6 +188,77 @@ public class TabTutoriadosFragment extends Fragment {
         protected void onPostExecute(Usuario usuario) {
             super.onPostExecute(usuario);
             VariablesGenerales.setUsuarioTutor(usuario);
+        }
+    }
+
+    private class HttpListaTipoDiscapacidad extends  AsyncTask<Void,Void,Void>{
+        List<TipoDiscapacidad> listaTipoDiscapacidad;
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final String url=conexion.urlcompeta("usuariotutoreado","tiposdiscapacidad/");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                ResponseEntity<TipoDiscapacidad[]> response= restTemplate.getForEntity(url, TipoDiscapacidad[].class);
+                listaTipoDiscapacidad = Arrays.asList(response.getBody());
+                return null;
+            }catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            variablesGenerales.setListaTipoDiscapacidad(listaTipoDiscapacidad);
+        }
+    }
+
+    private class HttpListaTiempos extends AsyncTask<Void,Void,Void>{
+        List<TiempoSensado> listaTiempoSensado;
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final String url=conexion.urlcompeta("usuariotutoreado","tiempos/");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                ResponseEntity<TiempoSensado[]> response= restTemplate.getForEntity(url, TiempoSensado[].class);
+                listaTiempoSensado = Arrays.asList(response.getBody());
+                return null;
+            }catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            variablesGenerales.setListaTiempoSensado(listaTiempoSensado);
+        }
+    }
+
+    private class HttpListaPerimetros extends AsyncTask<Void, Void, Void>{
+        List<Perimetro> listaPerimetro;
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final String url= conexion.urlcompeta("usuariotutoreado","perimetros/");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                ResponseEntity<Perimetro[]> response= restTemplate.getForEntity(url, Perimetro[].class);
+                listaPerimetro = Arrays.asList(response.getBody());
+                return null;
+            } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage(), e);
+            return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            variablesGenerales.setListaPerimetro(listaPerimetro);
         }
     }
 

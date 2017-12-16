@@ -1,11 +1,9 @@
 package ec.edu.upse.locatemev1.controladores.usuarioTutoriadoControl;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,7 +28,6 @@ import ec.edu.upse.locatemev1.configuracion.ParametrosConexion;
 import ec.edu.upse.locatemev1.configuracion.VariablesGenerales;
 import ec.edu.upse.locatemev1.modelo.Perimetro;
 import ec.edu.upse.locatemev1.modelo.TiempoSensado;
-import ec.edu.upse.locatemev1.modelo.TipoDiscapacidad;
 import ec.edu.upse.locatemev1.modelo.Usuario;
 import ec.edu.upse.locatemev1.modelo.UsuarioAsignado;
 
@@ -41,7 +38,7 @@ public class configuracionUsuario extends AppCompatActivity {
     Spinner sp_tiemposensado;
     Spinner sp_perimetro;
 
-    ParametrosConexion con =new ParametrosConexion();
+    ParametrosConexion conexion =new ParametrosConexion();
 
     List<TiempoSensado> listaTiempoSensado;
     List<Perimetro> listaPerimetro;
@@ -161,7 +158,7 @@ public class configuracionUsuario extends AppCompatActivity {
             sp_perimetro.setEnabled(false);
             chk_sms.setEnabled(false);
 
-            //llenar con predeterminados
+            //llenar conexion predeterminados
             String inicializarItemtiempo = String.valueOf(usuario.getTiempoSensado().getUsuTiempoDescripcion());
             sp_tiemposensado.setSelection(obtenerPosicionItem(sp_tiemposensado,inicializarItemtiempo));
 
@@ -181,10 +178,10 @@ public class configuracionUsuario extends AppCompatActivity {
     public static int obtenerPosicionItem(Spinner spinner, String str) {
         //Creamos la variable posicion y lo inicializamos en 0
         int posicion = 0;
-        //Recorre el spinner en busca del ítem que coincida con el parametro
+        //Recorre el spinner en busca del ítem que coincida conexion el parametro
         //que lo pasaremos posteriormente
         for (int i = 0; i < spinner.getCount(); i++) {
-            //Almacena la posición del ítem que coincida con la búsqueda
+            //Almacena la posición del ítem que coincida conexion la búsqueda
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(str)) {
                 posicion = i;
             }
@@ -249,7 +246,7 @@ public class configuracionUsuario extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final String url=con.urlcompeta("usuariotutoreado","tiempos/");
+                final String url= conexion.urlcompeta("usuariotutoreado","tiempos/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 ResponseEntity<TiempoSensado[]> response= restTemplate.getForEntity(url, TiempoSensado[].class);
@@ -283,7 +280,7 @@ public class configuracionUsuario extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final String url=con.urlcompeta("usuariotutoreado","perimetros/");
+                final String url= conexion.urlcompeta("usuariotutoreado","perimetros/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 ResponseEntity<Perimetro[]> response= restTemplate.getForEntity(url, Perimetro[].class);
@@ -325,7 +322,7 @@ public class configuracionUsuario extends AppCompatActivity {
         protected Usuario doInBackground(Void... params) {
             try {
                 //final String url = "http://172.19.11.195:8084/WebServiceAlertasSpring/api/usuariotutoreado/pruebapost/";
-                final String url=con.urlcompeta("usuariotutoreado","registraUsuarioTutoreado/");
+                final String url= conexion.urlcompeta("usuariotutoreado","registraUsuarioTutoreado/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 final Usuario usu= restTemplate.postForObject(url,usuario,Usuario.class);
@@ -387,7 +384,8 @@ public class configuracionUsuario extends AppCompatActivity {
         @Override
         protected UsuarioAsignado doInBackground(Void... params) {
             try {
-                final String url=con.urlcompeta("usuariotutoreado","registraUsuarioAsignado/");
+                System.out.println("sadasdadasdsadasdasd    "+ua);
+                final String url= conexion.urlcompeta("usuariotutoreado","registraUsuarioAsignado/");
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 final UsuarioAsignado usuasignado= restTemplate.postForObject(url,ua,UsuarioAsignado.class);
@@ -412,7 +410,7 @@ public class configuracionUsuario extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent =new Intent(getApplication(),perfilUsuarioTutoreado.class);
-                        intent.putExtra("usuario", usuarioAsignado);
+                        intent.putExtra("usuario", usuarioAsignado.getUsuario2());
                         startActivity(intent);
                         finish();
                     }
