@@ -165,9 +165,6 @@ public class nombreapellido extends AppCompatActivity {
                 intent.putExtra("accion","perfil");
                 startActivity(intent);
             }
-
-
-
         }
     }
 

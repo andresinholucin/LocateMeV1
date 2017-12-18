@@ -137,7 +137,7 @@ public class TabTutoriadosFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final String url = conexion.urlcompeta("usuario","udt/"+ VariablesGenerales.getLonIdTutor());
+                final String url = conexion.urlcompeta("usuariotutoreado","listausuarioasignado/"+ VariablesGenerales.getLonIdTutor());
                 Usuario usuario = new Usuario();
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
